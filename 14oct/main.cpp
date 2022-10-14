@@ -74,7 +74,7 @@ void sumsSolve(unsigned n, unsigned *s, unsigned count)
     unsigned min = 1;
     if (count)
         min = s[count - 1];
-    for (unsigned i = min; i <= count; ++i)
+    for (unsigned i = min; i <= n; ++i)
     {
         s[count] = i;
         sumsSolve(n - i, s, count + 1);
@@ -102,7 +102,7 @@ int main()
     nPrimes(n);
     std::cout << "factoring of " << n << ": " << n << " = ";
     factor(n);
-    std::cout << "\nAll possible sums of: " << n / 15 << ":\n";
+    std::cout << "\nAll possible sums of " << n / 15 << ":\n";
     sums(n / 15);
     const unsigned m1[][3] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
     const unsigned m2[][3] = {{8, 3, 1}, {1, 4, 2}, {0, 3, 5}};
