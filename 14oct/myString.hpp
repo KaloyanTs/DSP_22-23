@@ -20,6 +20,10 @@ public:
     const char *c_str() const;
     myString operator+(const myString &);
     myString operator+=(const myString &);
+    bool operator<(const myString &);
+    bool operator<=(const myString &);
+    bool operator>(const myString &);
+    bool operator>=(const myString &);
     ~myString();
 };
 
