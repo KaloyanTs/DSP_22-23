@@ -23,6 +23,18 @@ public:
     bool operator<=(const myString &);
     bool operator>(const myString &);
     bool operator>=(const myString &);
+    const char &front() const
+    {
+        if (data)
+            return *data;
+        return *buf;
+    }
+    const char &back() const
+    {
+        if (data)
+            return data[length() - 1];
+        return buf[length() - 1];
+    }
     ~myString();
 };
 
