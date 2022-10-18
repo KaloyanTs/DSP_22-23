@@ -1,5 +1,7 @@
 #ifndef __MYSTRING_HPP
 #define __MYSTRING_HPP
+#include <iostream>
+#include <cstring>
 
 class myString
 {
@@ -35,7 +37,11 @@ public:
             return data[length() - 1];
         return buf[length() - 1];
     }
+    const char &operator[](unsigned n) const;
     ~myString();
+    friend std::ostream &operator<<(std::ostream &os, const myString &s);
 };
+
+std::ostream &operator<<(std::ostream &os, const myString &s);
 
 #endif

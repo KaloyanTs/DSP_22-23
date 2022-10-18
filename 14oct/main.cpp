@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include "Matrix.hpp"
+#include "myString.hpp"
 
 unsigned productDigits(unsigned a, unsigned b)
 {
@@ -109,5 +110,7 @@ int main()
     Matrix M1(m1);
     Matrix M2(m2);
     std::cout << M1 + M2;
+    myString s("sdfdd");
+    std::cout << s + " ewrwr" << '\n';
     return 0;
 }

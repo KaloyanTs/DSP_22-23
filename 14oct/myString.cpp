@@ -1,6 +1,4 @@
 #include "myString.hpp"
-#include <iostream>
-#include <cstring>
 
 myString::myString() : data(nullptr)
 {
@@ -141,4 +139,20 @@ bool myString::operator>(const myString &other)
 bool myString::operator>=(const myString &other)
 {
     return !(*this < other);
+}
+
+const char &myString::operator[](unsigned n) const
+{
+    if (n >= length())
+        throw std::runtime_error("bad index");
+    if (data)
+        return data[n];
+    return buf[n];
+}
+
+std::ostream &operator<<(std::ostream &os, const myString &s)
+{
+    if (s.data)
+        return os << s.data;
+    return os << s.buf;
 }
