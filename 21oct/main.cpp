@@ -120,8 +120,9 @@ std::vector<int> uniqueElements(std::vector<int> v)
         if (i + 1 == v.cend() || i[1] != *i)
             res.push_back(*i);
         else
-            while (i != v.cend() && *i != i[1])
+            while (i != v.cend() && *i == i[1])
                 ++i;
+        ++i;
     }
     return res;
 }
