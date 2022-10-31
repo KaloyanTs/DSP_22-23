@@ -94,10 +94,70 @@ void patients2()
     }
 }
 
+template <typename T>
+void equalize(std::vector<std::stack<T>> &L)
+{
+    unsigned total = 0;
+    std::stack<T> buf;
+    for (unsigned i = 0; i < L.size(); ++i)
+    {
+        total += L.at(i).size();
+        while (!L.at(i).empty())
+        {
+            buf.push(L.at(i).top());
+            L.at(i).pop();
+        }
+    }
+    unsigned avg = total / L.size();
+    for (unsigned i = 0; i < L.size(); ++i)
+        for (unsigned j = 0; j < avg; ++j)
+        {
+            L.at(i).push(buf.top());
+            buf.pop();
+        }
+    unsigned i = 0;
+    while (!buf.empty())
+    {
+        L.at(i++).push(buf.top());
+        buf.pop();
+    }
+}
+
 int main()
 {
     patients();
     patients2();
-
+    std::vector<std::stack<int>> L;
+    L.push_back(std::stack<int>());
+    L.at(0).push(1);
+    L.at(0).push(4);
+    L.at(0).push(8);
+    L.at(0).push(2);
+    L.at(0).push(3);
+    L.push_back(std::stack<int>());
+    L.at(0).push(1);
+    L.at(0).push(4);
+    L.at(0).push(8);
+    L.at(0).push(2);
+    L.at(0).push(2);
+    L.at(0).push(12);
+    L.at(0).push(12);
+    L.at(0).push(21);
+    L.at(0).push(211);
+    L.at(0).push(34);
+    L.push_back(std::stack<int>());
+    L.at(0).push(1);
+    L.at(0).push(3);
+    equalize(L);
+    for (unsigned i = 0; i < L.size(); ++i)
+    {
+        std::cout << i + 1 << ": ";
+        while (!L.at(i).empty())
+        {
+            std::cout << L.at(i).top() << ' ';
+            L.at(i).pop();
+        }
+        std::cout << '\n';
+    }
     return 0;
 }
