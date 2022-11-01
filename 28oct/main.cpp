@@ -123,14 +123,6 @@ bool isValid(const Pos &p, bool home[][HOME_WIDTH])
            !home[p.first][p.second];
 }
 
-bool isInPath(const Path &path, const Pos &p)
-{
-    for (const Pos &b : path)
-        if (b == p)
-            return true;
-    return false;
-}
-
 void printPath(const Path &path)
 {
     for (unsigned i = 0; i < path.size(); ++i)
@@ -157,17 +149,18 @@ Path saveJerry(bool home[][HOME_WIDTH])
         v.pop();
         if (curPos == Pos(HOME_HEIGHT - 1, HOME_WIDTH - 1))
             return current;
+        home[curPos.first][curPos.second] = true;
         for (int i : {-1, 1})
         {
             if (isValid({curPos.first, curPos.second + i}, home) &&
-                !isInPath(current, {curPos.first, curPos.second + i}))
+                !home[curPos.first][curPos.second + i])
             {
                 current.push_back({curPos.first, curPos.second + i});
                 v.push(current);
                 current.pop_back();
             }
             if (isValid({curPos.first + i, curPos.second}, home) &&
-                !isInPath(current, {curPos.first + i, curPos.second}))
+                !home[curPos.first + i][curPos.second])
             {
                 current.push_back({curPos.first + i, curPos.second});
                 v.push(current);
