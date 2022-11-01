@@ -3,8 +3,8 @@
 #include <stack>
 #include <utility>
 
-const unsigned HOME_WIDTH = 2;
-const unsigned HOME_HEIGHT = 2;
+const unsigned HOME_WIDTH = 10;
+const unsigned HOME_HEIGHT = 10;
 
 template <typename T>
 struct qStack
@@ -111,55 +111,71 @@ unsigned ArthurIsCoward(unsigned n)
     return q.front();
 }
 
-using pos = std::pair<unsigned, unsigned>;
-std::stack<pos> saveJerry(bool home[][HOME_WIDTH])
-{
-    struct visCell
-    {
-        pos prev;
-        pos current;
-        visCell(const pos &c = {0, 0}, const pos &p = {-1, -1}) : prev(p), current(c) {}
-    };
-    std::queue<visCell> q;
-    std::stack<visCell> past;
+using Pos = std::pair<int, int>;
+using Path = std::vector<Pos>;
 
-    q.push(visCell());
-    visCell c;
-    while (!q.empty())
+bool isValid(const Pos &p, bool home[][HOME_WIDTH])
+{
+    return p.first >= 0 &&
+           p.second >= 0 &&
+           p.first < HOME_WIDTH &&
+           p.second < HOME_HEIGHT &&
+           !home[p.first][p.second];
+}
+
+bool isInPath(const Path &path, const Pos &p)
+{
+    for (const Pos &b : path)
+        if (b == p)
+            return true;
+    return false;
+}
+
+void printPath(const Path &path)
+{
+    for (unsigned i = 0; i < path.size(); ++i)
     {
-        c = q.front();
-        q.pop();
-        if (c.current == pos({HOME_WIDTH - 1, HOME_HEIGHT - 1}))
+        if (i)
+            std::cout << " -> ";
+        std::cout << '(' << path.at(i).first << ", " << path.at(i).second << ')';
+    }
+    std::cout << '\n';
+}
+
+Path saveJerry(bool home[][HOME_WIDTH])
+{
+    std::queue<Path> v;
+    Path start;
+    start.push_back({0, 0});
+    v.push(start);
+    Path current, nextCur;
+    Pos curPos;
+    while (!v.empty())
+    {
+        current = v.front();
+        curPos = current.back();
+        v.pop();
+        if (curPos == Pos(HOME_HEIGHT - 1, HOME_WIDTH - 1))
+            return current;
+        for (int i : {-1, 1})
         {
-            std::stack<pos> res;
-            res.push(c.current);
-            res.push(c.prev);
-            while (!past.empty())
+            if (isValid({curPos.first, curPos.second + i}, home) &&
+                !isInPath(current, {curPos.first, curPos.second + i}))
             {
-                while (c.prev.first != -1 && c.prev.second != -1 && past.top().current != c.prev)
-                {
-                    std::cout << '(' << past.top().current.first << ',' << past.top().current.second << ')' << ' ';
-                    past.pop();
-                }
-                c.prev = past.top().prev;
-                past.pop();
-                res.push(c.prev);
+                current.push_back({curPos.first, curPos.second + i});
+                v.push(current);
+                current.pop_back();
             }
-            return res;
-        }
-        if (!(c.current.first < 0 || c.current.first >= HOME_WIDTH ||
-              c.current.second < 0 || c.current.second >= HOME_HEIGHT ||
-              home[c.current.first][c.current.second]))
-        {
-            home[c.current.first][c.current.second] = true;
-            past.push(c);
-            c.prev = c.current;
-            for (int dx = -1; dx <= 1; dx += 2)
-                for (int dy = -1; dy <= 1; dy += 2)
-                    q.push(pos({c.current.first + dx, c.current.second + dy}));
+            if (isValid({curPos.first + i, curPos.second}, home) &&
+                !isInPath(current, {curPos.first + i, curPos.second}))
+            {
+                current.push_back({curPos.first + i, curPos.second});
+                v.push(current);
+                current.pop_back();
+            }
         }
     }
-    return std::stack<pos>();
+    return Path();
 }
 
 int main()
@@ -171,17 +187,17 @@ int main()
     q.push(4);
     q.push(2);
     std::cout << std::boolalpha << isSorted(q) << '\n';
-    qStack<int> st;
-    st.push(1);
-    st.push(2);
-    st.push(3);
-    st.push(4);
-    while (!st.empty())
-    {
-        std::cout << st.top() << ' ';
-        st.pop();
-    }
-    std::cout << '\n';
+    // qStack<int> st;
+    // st.push(1);
+    // st.push(2);
+    // st.push(3);
+    // st.push(4);
+    // while (!st.empty())
+    // {
+    //     std::cout << st.top() << ' ';
+    //     st.pop();
+    // }
+    // std::cout << '\n';
     std::cout << "From 10 knights Arthur should be on position No " << ArthurIsCoward(10) << '\n';
 
     stQueue<int> stQ;
@@ -197,35 +213,28 @@ int main()
     }
     std::cout << '\n';
 
-    // bool home[HOME_HEIGHT][HOME_WIDTH] =
-    //     {
-    //         {0, 1, 0, 0, 0, 0, 1, 1, 0, 1},
-    //         {0, 0, 0, 1, 1, 0, 0, 1, 0, 1},
-    //         {0, 1, 0, 1, 0, 1, 0, 1, 0, 1},
-    //         {1, 1, 0, 0, 0, 1, 0, 1, 0, 1},
-    //         {0, 1, 0, 0, 0, 0, 0, 0, 0, 1},
-    //         {1, 0, 0, 0, 0, 0, 1, 1, 0, 0},
-    //         {0, 0, 0, 0, 0, 0, 1, 1, 0, 1},
-    //         {0, 1, 0, 0, 0, 0, 1, 0, 0, 0},
-    //         {0, 0, 0, 0, 0, 1, 0, 1, 0, 0},
-    //         {1, 1, 0, 0, 0, 1, 0, 0, 0, 0},
-    //     };
-
     bool home[HOME_HEIGHT][HOME_WIDTH] =
         {
-            {0, 1},
-            {0, 0},
+            {0, 1, 0, 0, 0, 0, 1, 1, 0, 1},
+            {0, 0, 0, 1, 1, 0, 0, 1, 0, 1},
+            {0, 1, 0, 1, 0, 1, 0, 1, 0, 1},
+            {1, 1, 0, 0, 0, 1, 0, 1, 0, 1},
+            {0, 1, 0, 0, 0, 0, 0, 0, 0, 1},
+            {1, 0, 0, 0, 0, 0, 1, 1, 0, 0},
+            {0, 0, 0, 0, 0, 0, 1, 1, 0, 1},
+            {0, 1, 0, 0, 0, 0, 1, 0, 0, 0},
+            {0, 0, 0, 0, 0, 1, 0, 1, 0, 0},
+            {1, 1, 0, 0, 0, 1, 0, 0, 0, 0},
         };
 
-    std::stack<pos> path = saveJerry(home);
-    while (!path.empty())
+    Path path = saveJerry(home);
+    if (path.size())
     {
-        std::cout << '(' << path.top().first << ',' << path.top().second << ')';
-        path.pop();
-        if (!path.empty())
-            std::cout << " -> ";
+        std::cout << "Jerry is saved:\n";
+        printPath(path);
     }
-    std::cout << '\n';
+    else
+        std::cout << "Sorry, Jerry ;(\n";
 
     return 0;
 }
