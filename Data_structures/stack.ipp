@@ -1,3 +1,6 @@
+#ifndef __STACK_HPP
+#define __STACK_HPP
+
 #include <cstddef>
 #include <stdexcept>
 
@@ -86,3 +89,5 @@ T stack<T>::top() const
         throw std::runtime_error("empty stack");
     return head->data;
 }
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef __LIST_HPP
+#define __LIST_HPP
+
 #include <cstddef>
 #include <stdexcept>
 
@@ -113,3 +116,5 @@ T list<T>::back() const
         throw std::runtime_error("empty list");
     return tail->data;
 }
+
+#endif

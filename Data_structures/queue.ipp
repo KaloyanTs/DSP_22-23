@@ -1,3 +1,6 @@
+#ifndef __QUEUE_HPP
+#define __QUEUE_HPP
+
 #include <cstddef>
 #include <stdexcept>
 
@@ -88,3 +91,5 @@ T queue<T>::front() const
         throw std::runtime_error("empty queue");
     return head->data;
 }
+
+#endif
