@@ -1,6 +1,7 @@
 #include <iostream>
 #include "stack.ipp"
 #include "queue.ipp"
+#include "list.ipp"
 
 int main()
 {
@@ -33,6 +34,30 @@ int main()
         q.pop();
     }
     std::cout << '\n';
+
+    list<int> l;
+    l.push_back(1);
+    l.push_back(2);
+    l.push_back(6);
+    l.push_back(5);
+    l.push_back(3);
+    std::cout << l.front() << '\n';
+
+    while (!l.empty())
+    {
+        std::cout << l.back() << ' ';
+        l.pop_front();
+    }
+    std::cout << '\n';
+
+    try
+    {
+        l.pop_front();
+    }
+    catch (...)
+    {
+        std::cout << "error occured\n";
+    }
 
     return 0;
 }
