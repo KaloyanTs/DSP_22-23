@@ -23,6 +23,7 @@ struct queue
     void pop();
     T front() const;
     bool empty() const { return !head; }
+    size_t getSize() const { return size; }
     ~queue();
 };
 

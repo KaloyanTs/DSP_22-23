@@ -23,6 +23,7 @@ struct stack
     void pop();
     T top() const;
     bool empty() const { return !head; }
+    size_t getSize() const { return size; }
     ~stack();
 };
 
