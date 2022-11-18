@@ -1,5 +1,5 @@
 #include "doctest.h"
-#include "list.ipp"
+#include "forward_list.ipp"
 
 TEST_CASE("Списъкът е празен по подразбиране")
 {
