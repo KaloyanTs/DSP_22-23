@@ -5,6 +5,7 @@
 
 const unsigned WINDOW_LIMIT = 255;
 const std::string DEFAULT_TAB_URL = "http://exam_dsa";
+const unsigned INPUT_MAX = 127;
 
 struct Tab
 {
@@ -263,7 +264,8 @@ struct Browser
 int main()
 {
     Browser chrome;
-    char cmnd[100];
+    std::cout << "Browser started.\n";
+    char cmnd[INPUT_MAX + 1];
     do
     {
         chrome.showWindows();
