@@ -283,6 +283,36 @@ void oddEvenLinkedList(Node *list)
     oddIter->next = evens;
 }
 
+void partition(
+    Node *&head, int x)
+{
+    Node *iter = head;
+    Node *smaller = nullptr, *bigger = nullptr;
+    Node *smallerIter = nullptr, *biggerIter = nullptr;
+    while (iter)
+    {
+        if (iter->val > x)
+            if (!bigger)
+                bigger = biggerIter = iter;
+            else
+            {
+                biggerIter->next = iter;
+                biggerIter = biggerIter->next;
+            }
+        else if (!smaller)
+            smaller = smallerIter = iter;
+        else
+        {
+            smallerIter->next = iter;
+            smallerIter = smallerIter->next;
+        }
+        iter = iter->next;
+    }
+    smallerIter->next = bigger;
+    biggerIter->next = nullptr;
+    head = smaller;
+}
+
 int main()
 {
     Node *l1 = new Node(1,
@@ -333,6 +363,17 @@ int main()
                                                    new Node(5, nullptr)))));
     printList(l5);
     oddEvenLinkedList(l5);
+    printList(l5);
+    clear(l5);
+
+    l5 = new Node(4,
+                  new Node(2,
+                           new Node(1,
+                                    new Node(4,
+                                             new Node(2, nullptr)))));
+
+    printList(l5);
+    partition(l5, 3);
     printList(l5);
     clear(l5);
 
