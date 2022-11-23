@@ -259,7 +259,7 @@ int main()
     }
     catch (const std::exception &err)
     {
-        std::cout << "Error occured...\n";
+        std::cout<<err.what();
     }
 
     return 0;
