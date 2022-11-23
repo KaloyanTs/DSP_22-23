@@ -32,14 +32,12 @@ struct Window
         : head(new Tab(url)), pNext(next), pPrev(prev), oldestTab(head->timestamp) {}
     ~Window()
     {
-        if (!head)
-            return;
-        Tab *tmp = head->pNext;
-        while (tmp)
+        Tab *tmp = head;
+        while (head)
         {
-            head->pNext = tmp->pNext;
+            head = head->pNext;
             delete tmp;
-            tmp = head->pNext;
+            tmp = head;
         }
     }
     Window(const Window &other) = delete;
@@ -57,10 +55,7 @@ struct Window
     }
     void openTab(const std::string &url)
     {
-        Tab *tmp = head;
-        while (tmp->pNext)
-            tmp = tmp->pNext;
-        tmp->pNext = new Tab(url);
+        head = new Tab(url, head);
     }
     unsigned tabCount()
     {
@@ -91,7 +86,7 @@ struct Browser
     Window *current;
     size_t wCount;
     time_t timestamp;
-    Browser() : current(new Window(DEFAULT_TAB_URL)), wCount(0), timestamp(time(0)) {}
+    Browser() : current(new Window(DEFAULT_TAB_URL)), wCount(1), timestamp(time(0)) {}
     Browser(const Browser &other) = delete;
     Browser &operator=(const Browser &other) = delete;
     ~Browser()
@@ -147,7 +142,6 @@ struct Browser
         {
             delete current;
             current = nullptr;
-            --wCount;
         }
         else if (!tmp)
         {
@@ -177,44 +171,26 @@ struct Browser
             throw std::runtime_error("no windows");
         return time(0) - current->oldestTab;
     }
-    void operate(const std::string &url)
+    bool operate(const std::string &url)
     {
-        Tab *p = current->head;
-        Tab *nextP = p;
-        while (p && p->url != url)
-            p = p->pNext;
-        if (!p)
+        Tab *ptr = current->head;
+        while (ptr && ptr->url != url)
+            ptr = ptr->pNext;
+        if (!ptr)
         {
             current->openTab(url);
-            std::cout << "Append\n";
-            return;
+            current->showTabs();
+            return true;
         }
-        do
+        Tab *cleaner = current->head;
+        while (current->head != ptr)
         {
-            nextP = p->pNext;
-            while (nextP && nextP->url != url)
-                nextP = nextP->pNext;
-        } while (nextP);
-
-        nextP = current->head;
-        time_t newOldest = nextP->timestamp;
-        while (nextP != p->pNext)
-        {
-            if (newOldest > nextP->timestamp)
-                newOldest = nextP->timestamp;
-            nextP = nextP->pNext;
+            current->head = current->head->pNext;
+            delete cleaner;
+            cleaner = current->head;
         }
-        current->oldestTab = newOldest;
-
-        nextP = p;
-        p = p->pNext;
-        while (p)
-        {
-            nextP->pNext = p->pNext;
-            delete p;
-            p = nextP->pNext;
-        }
-        std::cout << "Trim\n";
+        current->showTabs();
+        return false;
     }
     bool command(char *cmnd)
     {
@@ -225,19 +201,26 @@ struct Browser
             std::cin >> cmnd;
             if (!strcmp(cmnd, "-O"))
             {
-                openWindow();
-                std::cout << "New window opened!\n";
+                if (openWindow())
+                    std::cout << "New window opened!\n";
+                else
+                    throw std::logic_error("Something went wrong...");
             }
             else if (!strcmp(cmnd, "-C"))
             {
-                closeWindow();
-                std::cout << "Current window closed!\n";
+                if (closeWindow())
+                    std::cout << "Current window closed!\n";
+                else
+                    throw std::logic_error("Something went wrong...");
             }
         }
         else if (!strcmp(cmnd, "TAB"))
         {
             std::cin >> cmnd;
-            operate(cmnd);
+            if (operate(cmnd))
+                std::cout << "Append!\n";
+            else
+                std::cout << "Trim!\n";
         }
         else if (!strcmp(cmnd, "UPTIME"))
             std::cout << uptime() << '\n';
@@ -266,11 +249,18 @@ int main()
     Browser chrome;
     std::cout << "Browser started.\n";
     char cmnd[INPUT_MAX + 1];
-    do
+    try
     {
-        chrome.showWindows();
-        std::cin >> cmnd;
-    } while (chrome.command(cmnd));
+        do
+        {
+            // chrome.showWindows();
+            std::cin >> cmnd;
+        } while (chrome.command(cmnd));
+    }
+    catch (const std::exception &err)
+    {
+        std::cout << "Error occured...\n";
+    }
 
     return 0;
 }
