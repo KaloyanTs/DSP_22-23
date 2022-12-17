@@ -29,11 +29,39 @@ bool DFS(Node *root, int what, std::vector<int> &path)
     {
         for (Node *c : root->children)
         {
-            path.push_back(c->data);
-            if (DFS(c, what, path))
+            std::vector<int> tmp(path);
+            tmp.push_back(c->data);
+            if (DFS(c, what, tmp))
+            {
+                path = tmp;
                 return true;
-            else
-                path.pop_back();
+            }
+        }
+    }
+    return false;
+}
+
+bool BFS(Node *root, int what, std::vector<int> &path)
+{
+    if (root->data == what)
+        return true;
+    else
+    {
+        for (Node *c : root->children)
+            if (c->data == what)
+            {
+                path.push_back(c->data);
+                return true;
+            }
+        for (Node *c : root->children)
+        {
+            std::vector<int> tmp(path);
+            tmp.push_back(c->data);
+            if (BFS(c, what, tmp))
+            {
+                path = tmp;
+                return true;
+            }
         }
     }
     return false;
@@ -53,6 +81,15 @@ int main()
     std::vector<int> p;
     p.push_back(1);
     if (DFS(t, 7, p))
+        for (int a : p)
+            std::cout << a << ' ';
+    else
+        std::cout << "No path...";
+    std::cout << '\n';
+
+    p = std::vector<int>();
+    p.push_back(1);
+    if (BFS(t, 7, p))
         for (int a : p)
             std::cout << a << ' ';
     else
