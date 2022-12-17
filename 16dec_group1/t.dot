@@ -1,0 +1,16 @@
+digraph
+{
+    A [label="1"];
+    B [label="2"];
+    C [label="3"];
+    D [label="7"];
+    E [label="6"];
+    F [label="1"];
+    G [label="3"];
+    A->B
+    B->C
+    B->D
+    A->E
+    E->F
+    E->G
+}
