@@ -2,10 +2,7 @@
 #include "SkipList.hpp"
 #include <string>
 
-int main()
-{
-    SkipList<std::string> test;
-    test.push_back("Sofia");
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+#include "doctest.h"
 
-    return 0;
-}
+#include "SkipList_tests.hpp"
