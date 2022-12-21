@@ -1,12 +1,12 @@
 digraph
 {
-    A [label="1"];
+    A [label="5"];
     B [label="2"];
-    C [label="3"];
-    D [label="7"];
-    E [label="6"];
-    F [label="1"];
-    G [label="3"];
+    C [label="1"];
+    D [label="4"];
+    E [label="7"];
+    F [label="6"];
+    G [label="9"];
     A->B
     B->C
     B->D
