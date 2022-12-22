@@ -5,8 +5,9 @@ std::ostream &operator<<(std::ostream &os, const SkipList<T> &s)
     while (iter)
     {
         iter->print(os);
-        std::cout << '\n';
         iter = iter->next;
+        if (iter)
+            os << '\n';
     }
     return os;
 }
@@ -25,7 +26,7 @@ void SkipList<T>::Node::print(std::ostream &os) const
 {
     os << data;
     if (skip)
-        os << "(link to " << skip->data << ')';
+        os << " (link to " << skip->data << ')';
 }
 
 template <typename T>
