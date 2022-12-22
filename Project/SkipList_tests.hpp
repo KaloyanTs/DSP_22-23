@@ -2,15 +2,11 @@
 #include "SkipList.hpp"
 #include <sstream>
 #include <string>
+#include <queue>
 #include <iostream>
 
 using IntList = SkipList<int>;
 using TrainMap = SkipList<std::string>;
-
-std::string minPath(const TrainMap &tm, const std::string &from, const std::string &to)
-{
-    return "";
-};
 
 TEST_CASE("Creating empty SkipList is indeed empty")
 {
@@ -83,5 +79,9 @@ TEST_CASE("1b solution.")
     tm.addLink("Dimitrovgrad", "NovaZagora");
     tm.addLink("StaraZagora", "Yambol");
     tm.addLink("NovaZagora", "Burgas");
-    CHECK(false);
+    std::vector<std::string> p = tm.BFSpath("Plovdiv", "StaraZagora");
+    std::ostringstream s;
+    for (const std::string &city : p)
+        s << city << '\n';
+    CHECK_EQ(s.str(), "Plovdiv\nDimitrovgrad\nStaraZagora\n");
 }

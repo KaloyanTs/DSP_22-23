@@ -1,3 +1,5 @@
+#include "SkipList.hpp"
+
 template <typename T>
 std::ostream &operator<<(std::ostream &os, const SkipList<T> &s)
 {
@@ -100,7 +102,10 @@ SkipList<T>::~SkipList()
 template <typename T>
 SkipList<T> &SkipList<T>::push_back(const T &data)
 {
-    end = end->next = new SkipList<T>::Node(data);
+    if (!end)
+        begin = end = new SkipList<T>::Node(data);
+    else
+        end = end->next = new SkipList<T>::Node(data);
     return *this;
 }
 
@@ -115,4 +120,66 @@ SkipList<T> &SkipList<T>::addLink(const T &from, const T &to)
         throw std::runtime_error("Cannot add link to non-existent element!");
     f->skip = t;
     return *this;
+}
+
+template <typename T>
+std::vector<T> SkipList<T>::BFSpath(const T &from, const T &to)
+{
+    this->reset();
+    std::vector<T> res;
+    std::queue<std::deque<Node *>> q;
+
+    Node *f = find(from);
+    if (!f)
+        throw std::runtime_error("Starting element not found in the list!");
+    Node *t = find(to);
+    if (!t)
+        throw std::runtime_error("Ending element not found in the list!");
+
+    std::deque<Node *> current;
+    current.push_back(f);
+    q.push(current);
+    while (!q.empty())
+    {
+        current = std::move(q.front());
+
+        q.pop();
+        if (current.back() == t)
+        {
+            std::vector<T> res;
+            for (const Node *ptr : current)
+                res.push_back(ptr->data);
+            return res;
+        }
+
+        if (!current.back()->visited)
+        {
+            current.back()->visited = true;
+            if (current.back()->skip)
+            {
+                current.push_back(current.back()->skip);
+                q.push(current);
+                current.pop_back();
+            }
+            if (current.back()->next)
+            {
+                current.push_back(current.back()->next);
+                q.push(current);
+            }
+        }
+    }
+
+    res.push_back("Sofia");
+    return res;
+}
+
+template <typename T>
+void SkipList<T>::reset()
+{
+    Node *iter = begin;
+    while (iter)
+    {
+        iter->visited = false;
+        iter = iter->next;
+    }
 }

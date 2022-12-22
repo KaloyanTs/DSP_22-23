@@ -1,6 +1,8 @@
 #ifndef _SKIP_LIST_HPP
 #define _SKIP_LIST_HPP
-#include <ostream>
+#include <iostream>
+#include <queue>
+#include <deque>
 
 template <typename T>
 class SkipList
@@ -10,8 +12,9 @@ class SkipList
         T data;
         Node *next;
         Node *skip;
+        bool visited;
         Node(const T &_data, Node *_next = nullptr, Node *_skip = nullptr)
-            : data(_data), next(_next), skip(_skip) {}
+            : data(_data), next(_next), skip(_skip), visited(false) {}
         void print(std::ostream &os) const;
     };
     Node *begin;
@@ -20,6 +23,7 @@ class SkipList
     Node *find(const T &) const;
     void copy(const SkipList &);
     void clear();
+    void reset();
 
 public:
     SkipList();
@@ -30,6 +34,7 @@ public:
 
     SkipList &push_back(const T &);
     SkipList &addLink(const T &, const T &);
+    std::vector<T> BFSpath(const T &, const T &);
     bool empty() const { return !begin; }
     template <typename C>
     friend std::ostream &operator<<(std::ostream &, const SkipList<C> &);
