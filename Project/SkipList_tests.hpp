@@ -1,9 +1,16 @@
 #include "doctest.h"
 #include "SkipList.hpp"
 #include <sstream>
+#include <string>
 #include <iostream>
 
 using IntList = SkipList<int>;
+using TrainMap = SkipList<std::string>;
+
+std::string minPath(const TrainMap &tm, const std::string &from, const std::string &to)
+{
+    return "";
+};
 
 TEST_CASE("Creating empty SkipList is indeed empty")
 {
@@ -63,4 +70,18 @@ TEST_CASE("Adding element indeed works.")
     IntList l;
     l.push_back(2);
     CHECK_FALSE(l.empty());
+}
+
+TEST_CASE("1b solution.")
+{
+    TrainMap tm;
+    std::string cities[] = {"Sofia", "Pazardzhik", "Plovdiv", "Dimitrovgrad", "StaraZagora", "NovaZagora", "Yambol", "Karnobat", "Burgas"};
+    for (const std::string &s : cities)
+        tm.push_back(s);
+    tm.addLink("Sofia", "Plovdiv");
+    tm.addLink("Plovdiv", "NovaZagora");
+    tm.addLink("Dimitrovgrad", "NovaZagora");
+    tm.addLink("StaraZagora", "Yambol");
+    tm.addLink("NovaZagora", "Burgas");
+    CHECK(false);
 }
