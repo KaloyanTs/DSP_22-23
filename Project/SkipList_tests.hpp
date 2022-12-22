@@ -1,3 +1,6 @@
+#ifndef __SKIPLIST_TESTS_HPP
+#define __SKIPLIST_TESTS_HPP
+
 #include "doctest.h"
 #include "SkipList.hpp"
 #include <sstream>
@@ -79,9 +82,23 @@ TEST_CASE("1b solution.")
     tm.addLink("Dimitrovgrad", "NovaZagora");
     tm.addLink("StaraZagora", "Yambol");
     tm.addLink("NovaZagora", "Burgas");
-    std::vector<std::string> p = tm.BFSpath("Plovdiv", "StaraZagora");
-    std::ostringstream s;
-    for (const std::string &city : p)
-        s << city << '\n';
-    CHECK_EQ(s.str(), "Plovdiv\nDimitrovgrad\nStaraZagora\n");
+    SUBCASE("Plovdiv->Burgas")
+    {
+        std::vector<std::string> p = tm.BFSpath("Plovdiv", "StaraZagora");
+        std::ostringstream s;
+        for (const std::string &city : p)
+            s << city << '\n';
+        CHECK_EQ(s.str(), "Plovdiv\nDimitrovgrad\nStaraZagora\n");
+    }
+
+    SUBCASE("Sofia->Yambol")
+    {
+        std::vector<std::string> p = tm.BFSpath("Sofia", "Yambol");
+        std::ostringstream s;
+        for (const std::string &city : p)
+            s << city << '\n';
+        CHECK_EQ(s.str(), "Sofia\nPlovdiv\nNovaZagora\nYambol\n");
+    }
 }
+
+#endif
