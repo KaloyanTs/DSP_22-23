@@ -71,7 +71,7 @@ TEST_CASE("Adding element indeed works.")
     CHECK_FALSE(l.empty());
 }
 
-TEST_CASE("1b solution.")
+TEST_CASE("1a solution.")
 {
     TrainMap tm;
     std::string cities[] = {"Sofia", "Pazardzhik", "Plovdiv", "Dimitrovgrad", "StaraZagora", "NovaZagora", "Yambol", "Karnobat", "Burgas"};
