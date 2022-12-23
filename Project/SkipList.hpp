@@ -17,6 +17,8 @@ class SkipList
             : data(_data), next(_next), skip(_skip), visited(false) {}
         void print(std::ostream &os) const;
     };
+
+protected:
     Node *begin;
     Node *end;
 
