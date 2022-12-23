@@ -126,7 +126,6 @@ template <typename T>
 std::vector<T> SkipList<T>::BFSpath(const T &from, const T &to)
 {
     this->reset();
-    std::vector<T> res;
     std::queue<std::deque<Node *>> q;
 
     Node *f = find(from);
@@ -168,9 +167,8 @@ std::vector<T> SkipList<T>::BFSpath(const T &from, const T &to)
             }
         }
     }
-
-    res.push_back("Sofia");
-    return res;
+    
+    return std::vector<T>();
 }
 
 template <typename T>
