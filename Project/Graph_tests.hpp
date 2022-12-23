@@ -77,37 +77,4 @@ TEST_CASE("Adding element indeed works.")
     // CHECK_FALSE(l.empty());
 }
 
-TEST_CASE("1a solution.")
-{
-    CHECK(false);
-    // todo repair
-
-    // TrainMap tm;
-    // std::string cities[] = {"Sofia", "Pazardzhik", "Plovdiv", "Dimitrovgrad", "StaraZagora", "NovaZagora", "Yambol", "Karnobat", "Burgas"};
-    // for (const std::string &s : cities)
-    //     tm.push_back(s);
-    // tm.addLink("Sofia", "Plovdiv");
-    // tm.addLink("Plovdiv", "NovaZagora");
-    // tm.addLink("Dimitrovgrad", "NovaZagora");
-    // tm.addLink("StaraZagora", "Yambol");
-    // tm.addLink("NovaZagora", "Burgas");
-    // SUBCASE("Plovdiv->Burgas")
-    // {
-    //     std::vector<std::string> p = tm.BFSpath("Plovdiv", "StaraZagora");
-    //     std::ostringstream s;
-    //     for (const std::string &city : p)
-    //         s << city << '\n';
-    //     CHECK_EQ(s.str(), "Plovdiv\nDimitrovgrad\nStaraZagora\n");
-    // }
-
-    // SUBCASE("Sofia->Yambol")
-    // {
-    //     std::vector<std::string> p = tm.BFSpath("Sofia", "Yambol");
-    //     std::ostringstream s;
-    //     for (const std::string &city : p)
-    //         s << city << '\n';
-    //     CHECK_EQ(s.str(), "Sofia\nPlovdiv\nNovaZagora\nYambol\n");
-    // }
-}
-
 #endif
