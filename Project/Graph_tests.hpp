@@ -12,69 +12,34 @@ TEST_CASE("Creating empty Graph is indeed empty")
     CHECK(g.empty());
 }
 
-TEST_CASE("Constructor with one parameters cretes non-empty Graph")
+TEST_CASE("Printing Graph data")
 {
-    CHECK(false);
-    // todo repair
-    // Graph l(1);
-    // CHECK_FALSE(l.empty());
+
+    Graph g;
+    g.addVertex("A").addVertex("B").addVertex("C").addVertex("D").addVertex("E").addVertex("F");
+
+    g.addEdge("A", "B", 18).addEdge("A", "C", 2).addEdge("A", "D", 5).addEdge("B", "D", 14).addEdge("B", "E", 12).addEdge("D", "E", 7).addEdge("C", "F", 20).addEdge("D", "F", 26);
+
+    std::ostringstream s;
+    s << g;
+    CHECK_EQ(s.str(), "A\t->\tB(18)\tC(2)\tD(5)\nB\t->\tA(18)\tD(14)\tE(12)\nC\t->\tA(2)\tF(20)\nD\t->\tA(5)\tB(14)\tE(7)\tF(26)\nE\t->\tB(12)\tD(7)\nF\t->\tC(20)\tD(26)\n");
 }
 
-TEST_CASE("Принтиране на Graph")
+TEST_CASE("Walk through cities")
 {
+    Graph g;
+    std::string sites[] = {"DzhumayaSquare", "HistoricalMuseum", "RomanStadium", "ArtGallery", "AntiqueTheatre", "RailStation"};
+    g.addVertex(sites[0]).addVertex(sites[1]).addVertex(sites[2]).addVertex(sites[3]).addVertex(sites[4]).addVertex(sites[5]);
+
+    g.addEdge(sites[0], sites[1], 18).addEdge(sites[0], sites[2], 2).addEdge(sites[0], sites[3], 5).addEdge(sites[1], sites[3], 14).addEdge(sites[1], sites[4], 12).addEdge(sites[3], sites[4], 7).addEdge(sites[2], sites[5], 20).addEdge(sites[3], sites[5], 26);
+
+    std::vector<std::string> res = g.mostCitiesGivenTotalPrice("RailStation","RailStation", 68);
+
+    for (const std::string &city : res)
+        std::clog << city << '\t';
+    std::clog << '\n';
+
     CHECK(false);
-    // todo repair
-
-    // IntList l(1);
-    // l.push_back(2);
-    // l.push_back(3);
-    // l.push_back(4);
-    // l.push_back(5);
-    // l.addLink(2, 4);
-    // l.addLink(1, 5);
-    // std::ostringstream s;
-    // s << l;
-    // CHECK_EQ(s.str(), "1 (link to 5)\n2 (link to 4)\n3\n4\n5");
-}
-
-TEST_CASE("Копирането на Graph е коректно")
-{
-    CHECK(false);
-    // todo repair
-
-    // IntList l1(1);
-    // l1.push_back(2);
-    // l1.push_back(3);
-    // l1.push_back(4);
-    // l1.push_back(5);
-    // l1.addLink(2, 4);
-    // l1.addLink(1, 5);
-    // std::ostringstream s1;
-    // s1 << l1;
-    // IntList l2(1);
-    // l2.push_back(2);
-    // l2.push_back(3);
-    // l2.push_back(4);
-    // l2.push_back(5);
-    // l2.addLink(2, 4);
-    // l2.addLink(1, 5);
-    // std::ostringstream s2;
-    // s2 << l2;
-    // CHECK_EQ(s1.str(), s2.str());
-    // l2.push_back(6);
-    // s2.clear();
-    // s2 << l2;
-    // CHECK_NE(s1.str(), s2.str());
-}
-
-TEST_CASE("Adding element indeed works.")
-{
-    CHECK(false);
-    // todo repair
-
-    // IntList l;
-    // l.push_back(2);
-    // CHECK_FALSE(l.empty());
 }
 
 #endif
