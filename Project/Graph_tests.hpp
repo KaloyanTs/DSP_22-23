@@ -33,13 +33,14 @@ TEST_CASE("Walk through cities")
 
     g.addEdge(sites[0], sites[1], 18).addEdge(sites[0], sites[2], 2).addEdge(sites[0], sites[3], 5).addEdge(sites[1], sites[3], 14).addEdge(sites[1], sites[4], 12).addEdge(sites[3], sites[4], 7).addEdge(sites[2], sites[5], 20).addEdge(sites[3], sites[5], 26);
 
-    std::vector<std::string> res = g.mostCitiesGivenTotalPrice("RailStation","RailStation", 68);
+    std::list<std::string> res = g.mostCitiesGivenTotalPrice("RailStation", "RailStation", 68);
 
-    for (const std::string &city : res)
-        std::clog << city << '\t';
-    std::clog << '\n';
+    // for (const std::string &city : res)
+    //     std::clog << city << '\t';
+    // std::clog << '\n';
+    // todo test for the cities
 
-    CHECK(false);
+    CHECK_EQ(Graph::uniquesCount(res), 5);
 }
 
 #endif
