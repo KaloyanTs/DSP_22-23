@@ -23,7 +23,6 @@ words TrainMap::shortestJourney(const words &cities)
             from = &(*(i - 1));
             to = &(*i);
         }
-        std::cout << *from << ' ' << *to << '\n';
         current = BFSpath(*from, *to);
         if (current.empty())
             return words();
