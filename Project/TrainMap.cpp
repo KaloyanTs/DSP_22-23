@@ -15,18 +15,20 @@ words TrainMap::shortestJourney(const words &cities)
         }
         else if (i == cities.end())
         {
-            from = &(*(i - 1));
+            from = &(*(--i));
+            ++i;
             to = &(end->data);
         }
         else
         {
-            from = &(*(i - 1));
+            from = &(*(--i));
+            ++i;
             to = &(*i);
         }
         current = BFSpath(*from, *to);
         if (current.empty())
             return words();
-        res.insert(res.end(), current.begin(), current.end() - 1);
+        res.insert(res.end(), current.begin(), --current.end());
         if (i == cities.end())
             break;
         ++i;
