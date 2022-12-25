@@ -5,6 +5,12 @@
 std::string CityMap::start = "Railstation";
 const unsigned CITY_MAX_LENGTH = 128;
 
+std::list<Landmark> CityMap::findBestWalk(const std::string &path)
+{
+    CityMap cm = std::move(CityMap::readFromFile(path));
+    return cm.bestWalk();
+}
+
 CityMap CityMap::readFromFile(const std::string &path)
 {
     std::ifstream ifs;

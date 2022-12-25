@@ -8,8 +8,7 @@
 
 TEST_CASE("They can visit at most 5 landmarks in Stara Zagora.")
 {
-    CityMap stz = std::move(CityMap::readFromFile("StaraZagora.txt"));
-    std::list<std::string> res = stz.bestWalk();
+    std::list<std::string> res = CityMap::findBestWalk("StaraZagora.txt");
     for (const std::string &city : res)
         std::clog << city << '\n';
     CHECK_EQ(Graph::uniquesCount(res), 5);
