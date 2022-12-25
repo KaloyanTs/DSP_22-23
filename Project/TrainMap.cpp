@@ -1,4 +1,43 @@
 #include "TrainMap.hpp"
+#include <fstream>
+
+const unsigned MAX_INPUT_LENGTH = 128;
+
+words TrainMap::solveShortestJourney(const std::string &mapPath, const std::string &constrainsPath)
+{
+    std::ifstream ifs;
+    ifs.open(std::string("data\\") + mapPath);
+    if (!ifs.is_open())
+        return words();
+    unsigned count;
+    ifs >> count;
+    ifs.ignore();
+    TrainMap tm;
+    std::string cities[] = {"Sofia", "Pazardzhik", "Plovdiv", "Dimitrovgrad", "StaraZagora", "NovaZagora", "Yambol", "Karnobat", "Burgas"};
+    char buf1[MAX_INPUT_LENGTH], buf2[MAX_INPUT_LENGTH];
+    for (unsigned i = 0; i < count; ++i)
+    {
+        ifs >> buf1;
+        tm.push_back(buf1);
+    }
+    while (!ifs.eof())
+    {
+        ifs >> buf1 >> buf2;
+        tm.addLink(buf1, buf2);
+    }
+    ifs.close();
+
+    ifs.open(std::string("data\\") + constrainsPath);
+    if (!ifs.is_open())
+        return words();
+    std::list<std::string> constrains;
+    while (!ifs.eof())
+    {
+        ifs >> buf1;
+        constrains.push_back(buf1);
+    }
+    return tm.shortestJourney(constrains);
+}
 
 words TrainMap::shortestJourney(const words &cities)
 {

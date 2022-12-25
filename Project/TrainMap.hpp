@@ -8,7 +8,11 @@ using words = std::list<std::string>;
 
 class TrainMap : public SkipList<word>
 {
+    TrainMap() {}
+
 public:
+    static words solveShortestJourney(const std::string &, const std::string &);
+
     words shortestJourney(const words &);
 };
 
