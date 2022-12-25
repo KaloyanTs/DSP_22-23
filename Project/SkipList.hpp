@@ -3,6 +3,7 @@
 #include <iostream>
 #include <queue>
 #include <deque>
+#include <list>
 
 template <typename T>
 class SkipList
@@ -36,7 +37,7 @@ public:
 
     SkipList &push_back(const T &);
     SkipList &addLink(const T &, const T &);
-    std::vector<T> BFSpath(const T &, const T &);
+    std::list<T> BFSpath(const T &, const T &);
     bool empty() const { return !begin; }
     template <typename C>
     friend std::ostream &operator<<(std::ostream &, const SkipList<C> &);

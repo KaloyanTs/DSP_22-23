@@ -123,7 +123,7 @@ SkipList<T> &SkipList<T>::addLink(const T &from, const T &to)
 }
 
 template <typename T>
-std::vector<T> SkipList<T>::BFSpath(const T &from, const T &to)
+std::list<T> SkipList<T>::BFSpath(const T &from, const T &to)
 {
     this->reset();
     std::queue<std::deque<Node *>> q;
@@ -145,7 +145,7 @@ std::vector<T> SkipList<T>::BFSpath(const T &from, const T &to)
         q.pop();
         if (current.back() == t)
         {
-            std::vector<T> res;
+            std::list<T> res;
             for (const Node *ptr : current)
                 res.push_back(ptr->data);
             return res;
@@ -168,7 +168,7 @@ std::vector<T> SkipList<T>::BFSpath(const T &from, const T &to)
         }
     }
     
-    return std::vector<T>();
+    return std::list<T>();
 }
 
 template <typename T>
