@@ -7,10 +7,12 @@ using Landmark = std::string;
 
 class CityMap : public Graph
 {
-    static Landmark start = "Railstation";
+    static Landmark start;
+    unsigned timeLimit;
 
 public:
-    std::list<Landmark> bestWalk(unsigned limit) { return mostVerticesGivenTotalPrice(start, start, limit); }
+    std::list<Landmark> bestWalk() { return mostVerticesGivenTotalPrice(start, start, timeLimit); }
+    static CityMap readFromFile(const std::string &);
     // todo CityMap tests
 };
 
