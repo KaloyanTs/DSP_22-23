@@ -3,7 +3,6 @@
 
 #include "doctest.h"
 #include "SkipList.hpp"
-#include "TrainMap.hpp"
 #include <sstream>
 #include <string>
 #include <queue>
@@ -69,82 +68,6 @@ TEST_CASE("Adding element indeed works.")
     IntList l;
     l.push_back(2);
     CHECK_FALSE(l.empty());
-}
-
-TEST_CASE("BFS in SkipList")
-{
-    TrainMap tm;
-    std::string cities[] = {"Sofia", "Pazardzhik", "Plovdiv", "Dimitrovgrad", "StaraZagora", "NovaZagora", "Yambol", "Karnobat", "Burgas"};
-    for (const std::string &s : cities)
-        tm.push_back(s);
-    tm.addLink(cities[0], cities[2]);
-    tm.addLink(cities[2], cities[5]);
-    tm.addLink(cities[3], cities[5]);
-    tm.addLink(cities[4], cities[6]);
-    tm.addLink(cities[5], cities[8]);
-
-    SUBCASE("Plovdiv->Burgas")
-    {
-        std::vector<std::string> p = tm.BFSpath(cities[2], cities[4]);
-        std::ostringstream s;
-        for (const std::string &city : p)
-            s << city << '\n';
-        CHECK_EQ(s.str(), "Plovdiv\nDimitrovgrad\nStaraZagora\n");
-    }
-
-    SUBCASE("Sofia->Yambol")
-    {
-        std::vector<std::string> p = tm.BFSpath(cities[0], cities[6]);
-        std::ostringstream s;
-        for (const std::string &city : p)
-            s << city << '\n';
-        CHECK_EQ(s.str(), "Sofia\nPlovdiv\nNovaZagora\nYambol\n");
-    }
-
-    SUBCASE("Sofia->Sofia")
-    {
-        std::vector<std::string> p = tm.BFSpath(cities[0], cities[0]);
-        std::ostringstream s;
-        for (const std::string &city : p)
-            s << city << '\n';
-        CHECK_EQ(s.str(), "Sofia\n");
-    }
-}
-
-TEST_CASE("Journey through sequence of cities.")
-{
-    TrainMap tm;
-    std::string cities[] = {"Sofia", "Pazardzhik", "Plovdiv", "Dimitrovgrad", "StaraZagora", "NovaZagora", "Yambol", "Karnobat", "Burgas"};
-    for (const std::string &s : cities)
-        tm.push_back(s);
-    tm.addLink(cities[0], cities[2]);
-    tm.addLink(cities[2], cities[5]);
-    tm.addLink(cities[3], cities[5]);
-    tm.addLink(cities[4], cities[6]);
-    tm.addLink(cities[5], cities[8]);
-
-    SUBCASE("Journey through Plovdiv, StaraZagora and Yambol.")
-    {
-        std::vector<std::string> citiesToVisit;
-        citiesToVisit.push_back(cities[2]);
-        citiesToVisit.push_back(cities[4]);
-        citiesToVisit.push_back(cities[6]);
-        std::vector<std::string> p = tm.shortestJourney(citiesToVisit);
-        std::ostringstream s;
-        for (const std::string &city : p)
-            s << city << '\n';
-        CHECK_EQ(s.str(), "Sofia\nPlovdiv\nDimitrovgrad\nStaraZagora\nYambol\nKarnobat\nBurgas\n");
-    }
-
-    SUBCASE("Journey through no cities.")
-    {
-        std::vector<std::string> citiesToVisit;
-        std::vector<std::string> p = tm.shortestJourney(citiesToVisit);
-        std::ostringstream s;
-        for (const std::string &city : p)
-            s << city << '\n';
-        CHECK_EQ(s.str(), "Sofia\nPlovdiv\nNovaZagora\nBurgas\n");
-    }
 }
 
 #endif
