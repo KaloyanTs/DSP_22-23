@@ -16,8 +16,6 @@ class Graph
 
 public:
     static unsigned uniquesCount(const std::list<Vertex> &);
-    // todo should this method be in the CityMap class?
-    static Graph readFromFile(const std::string &);
 
     Graph &addVertex(const std::string &);
     Graph &addEdge(const std::string &, const std::string &, unsigned);

@@ -9,13 +9,6 @@ unsigned Graph::uniquesCount(const std::list<std::string> &x)
     return res.size();
 }
 
-Graph Graph::readFromFile(const std::string &)
-{
-    // todo check whether move semantics should be written for Graph
-    // todo implement correctly
-    return Graph();
-}
-
 Graph &Graph::addVertex(const std::string &name)
 {
     assArr.insert(std::pair<Vertex, ChildrenList>(name, ChildrenList()));
