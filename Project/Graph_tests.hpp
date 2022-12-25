@@ -28,12 +28,25 @@ TEST_CASE("Printing Graph data")
 TEST_CASE("Walk through cities")
 {
     Graph g;
-    std::string sites[] = {"DzhumayaSquare", "HistoricalMuseum", "RomanStadium", "ArtGallery", "AntiqueTheatre", "RailStation"};
+    std::string sites[] = {"DzhumayaSquare", "HistoricalMuseum", "RomanStadium", "ArtGallery", "AntiqueTheatre", "Railstation"};
     g.addVertex(sites[0]).addVertex(sites[1]).addVertex(sites[2]).addVertex(sites[3]).addVertex(sites[4]).addVertex(sites[5]);
 
     g.addEdge(sites[0], sites[1], 18).addEdge(sites[0], sites[2], 2).addEdge(sites[0], sites[3], 5).addEdge(sites[1], sites[3], 14).addEdge(sites[1], sites[4], 12).addEdge(sites[3], sites[4], 7).addEdge(sites[2], sites[5], 20).addEdge(sites[3], sites[5], 26);
 
-    std::list<std::string> res = g.mostCitiesGivenTotalPrice("RailStation", "RailStation", 68);
+    std::list<std::string> res = g.mostVerticesGivenTotalPrice("Railstation", "Railstation", 68);
+
+    // for (const std::string &city : res)
+    //     std::clog << city << '\t';
+    // std::clog << '\n';
+    // todo test for the names and order of the cities
+
+    CHECK_EQ(Graph::uniquesCount(res), 5);
+}
+
+TEST_CASE("Best walk in Stara Zagora")
+{
+    Graph g = std::move(Graph::readFromFile("StaraZagora.txt"));
+    std::list<std::string> res = g.mostVerticesGivenTotalPrice("Railstation", "Railstation", 68);
 
     // for (const std::string &city : res)
     //     std::clog << city << '\t';
