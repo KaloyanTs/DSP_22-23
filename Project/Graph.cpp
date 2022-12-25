@@ -9,6 +9,13 @@ unsigned Graph::uniquesCount(const std::list<std::string> &x)
     return res.size();
 }
 
+Graph Graph::readFromFile(const std::string &)
+{
+    // todo check whether move semantics should be written for Graph
+    // todo implement correctly
+    return Graph();
+}
+
 Graph &Graph::addVertex(const std::string &name)
 {
     assArr.insert(std::pair<Vertex, ChildrenList>(name, ChildrenList()));
@@ -20,18 +27,16 @@ Graph &Graph::addEdge(const std::string &from, const std::string &to, unsigned w
     assArr[to].push_back(std::pair<Vertex, unsigned>(from, w));
     return *this;
 }
-std::list<Vertex> Graph::mostCitiesGivenTotalPrice(const std::string &begin, const std::string &end, unsigned limit)
+std::list<Vertex> Graph::mostVerticesGivenTotalPrice(const std::string &begin, const std::string &end, unsigned limit)
 {
     const ChildrenList &beginPaths = assArr[begin];
-    std::list<Vertex> res;
-    res.push_back(begin);
     std::list<Vertex> tmp, maxL;
     unsigned maxDiff = 0, currDiff = 0;
     for (const WeightedPathTo &p : beginPaths)
     {
         if (p.second <= limit)
         {
-            tmp = mostCitiesGivenTotalPrice(p.first, end, limit - p.second);
+            tmp = mostVerticesGivenTotalPrice(p.first, end, limit - p.second);
             currDiff = uniquesCount(tmp);
             // todo try using no recursion but a stack
             if (tmp.back() == end && currDiff > maxDiff)
@@ -41,9 +46,8 @@ std::list<Vertex> Graph::mostCitiesGivenTotalPrice(const std::string &begin, con
             }
         }
     }
-    // todo use another stl structure allowing to std::move the maxL and then push_front the begin
-    res.insert(res.end(), maxL.begin(), maxL.end());
-    return res;
+    maxL.push_front(begin);
+    return maxL;
 }
 
 std::ostream &operator<<(std::ostream &os, const Graph &g)

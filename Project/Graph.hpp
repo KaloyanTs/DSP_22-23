@@ -16,10 +16,11 @@ class Graph
 
 public:
     static unsigned uniquesCount(const std::list<Vertex> &);
+    static Graph readFromFile(const std::string &);
 
     Graph &addVertex(const std::string &);
     Graph &addEdge(const std::string &, const std::string &, unsigned);
-    std::list<Vertex> mostCitiesGivenTotalPrice(const std::string &, const std::string &, unsigned);
+    std::list<Vertex> mostVerticesGivenTotalPrice(const std::string &, const std::string &, unsigned);
     friend std::ostream &operator<<(std::ostream &, const Graph &);
     bool empty() const { return assArr.empty(); }
 };
