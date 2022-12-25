@@ -4,7 +4,7 @@ project(BDZ VERSION 0.1.0)
 include(CTest)
 enable_testing()
 
-add_executable(BDZ main.cpp TrainMap.cpp Graph.cpp)
+add_executable(BDZ main.cpp TrainMap.cpp Graph.cpp CityMap.cpp)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
