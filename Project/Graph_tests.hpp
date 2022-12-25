@@ -43,17 +43,4 @@ TEST_CASE("Walk through cities")
     CHECK_EQ(Graph::uniquesCount(res), 5);
 }
 
-TEST_CASE("Best walk in Stara Zagora")
-{
-    Graph g = std::move(Graph::readFromFile("StaraZagora.txt"));
-    std::list<std::string> res = g.mostVerticesGivenTotalPrice("Railstation", "Railstation", 68);
-
-    // for (const std::string &city : res)
-    //     std::clog << city << '\t';
-    // std::clog << '\n';
-    // todo test for the cities
-
-    CHECK_EQ(Graph::uniquesCount(res), 5);
-}
-
 #endif
