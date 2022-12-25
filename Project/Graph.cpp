@@ -16,6 +16,10 @@ Graph &Graph::addVertex(const std::string &name)
 }
 Graph &Graph::addEdge(const std::string &from, const std::string &to, unsigned w)
 {
+    if (assArr.find(from) == assArr.end())
+        addVertex(from);
+    if (assArr.find(to) == assArr.end())
+        addVertex(to);
     assArr[from].push_back(std::pair<Vertex, unsigned>(to, w));
     assArr[to].push_back(std::pair<Vertex, unsigned>(from, w));
     return *this;
