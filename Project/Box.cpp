@@ -98,8 +98,6 @@ Box &Box::addBox(Box *b)
     return *this;
 }
 
-#include <iostream>
-
 void Box::optimize()
 {
 
