@@ -33,10 +33,12 @@ TEST_CASE("Optimizing boxes")
 {
     std::list<Box> l = Box::readFromFile("boxesdata.txt");
     std::ostringstream s;
-    l.front().optimize();
-    std::cout<<"OK\n";
-    std::cout << l.front();
-    CHECK_EQ(s.str(), "PlovdivBox:\n\tMagnet\n\tBook\n\tDrawings:\n\t\tOldPlovdiv\n\tPlates:\n\t\tDecorativePlate\n");
+    for (Box &b : l)
+    {
+        b.optimize();
+        s << b;
+    }
+    CHECK_EQ(s.str(), "PlovdivBox:\n\tMagnet\n\tBook\n\tDrawings:\n\t\tOldPlovdiv\n\tPlates:\n\t\tDecorativePlate\nStaraZagoraBox:\n\tPostcard\n\tFigurines:\n\t\tAncientFigurine\n\tCups:\n\t\tTraditionalCup\n");
 }
 
 #endif

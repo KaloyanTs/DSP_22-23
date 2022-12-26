@@ -98,8 +98,12 @@ Box &Box::addBox(Box *b)
     return *this;
 }
 
+#include <iostream>
+
 void Box::optimize()
 {
+    // std::clog << *this << "is being optimized...\n";                    // todo
+    // std::clog << this->souvenirs.size() << ' ' << boxes.size() << '\n'; // todo
     std::list<Box *>::iterator cleaner = boxes.begin();
     while (cleaner != boxes.end())
     {
@@ -113,13 +117,16 @@ void Box::optimize()
             ++cleaner;
     }
     cleaner = boxes.begin();
-    if (boxes.size() == 1 && (*cleaner)->noSouvenirs())
+    if (boxes.size() == 1 && souvenirs.empty())
     {
         for (Box *s : (*cleaner)->boxes)
         {
             boxes.push_back(s);
             s = nullptr;
         }
+        for (const std::string &s : (*cleaner)->souvenirs)
+            souvenirs.push_back(s);
+        name = (*cleaner)->name;
         delete (*cleaner);
         boxes.erase(cleaner);
     }
