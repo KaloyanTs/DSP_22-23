@@ -39,6 +39,7 @@ TEST_CASE("Optimizing boxes")
         s << b;
     }
     CHECK_EQ(s.str(), "PlovdivBox:\n\tMagnet\n\tBook\n\tDrawings:\n\t\tOldPlovdiv\n\tPlates:\n\t\tDecorativePlate\nStaraZagoraBox:\n\tPostcard\n\tFigurines:\n\t\tAncientFigurine\n\tCups:\n\t\tTraditionalCup\n");
+    // todo test when highest level box becomes empty
 }
 
 #endif
