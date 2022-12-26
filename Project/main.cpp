@@ -15,6 +15,7 @@ int main()
     TaskSolver::b();
     TaskSolver::c();
     std::cout << "Enter any key to exit...";
+    std::cin.ignore();
     std::cin.get();
     return 0;
 }
