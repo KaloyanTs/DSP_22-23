@@ -23,9 +23,11 @@ public:
     ~Box();
 
     static std::list<Box> readFromFile(const std::string &path);
-    void optimize(Box &b);
+    void optimize();
     Box &addSouvenir(const std::string &s);
     Box &addBox(Box *b);
+    bool empty() const { return boxes.empty() && souvenirs.empty(); }
+    bool noSouvenirs() const { return souvenirs.empty(); }
     friend std::ostream &operator<<(std::ostream &os, const Box &b);
 };
 

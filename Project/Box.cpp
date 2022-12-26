@@ -98,8 +98,31 @@ Box &Box::addBox(Box *b)
     return *this;
 }
 
-void Box::optimize(Box &b)
+void Box::optimize()
 {
+    std::list<Box *>::iterator cleaner = boxes.begin();
+    while (cleaner != boxes.end())
+    {
+        (*cleaner)->optimize();
+        if ((*cleaner)->empty())
+        {
+            delete *cleaner;
+            boxes.erase(cleaner++);
+        }
+        else
+            ++cleaner;
+    }
+    cleaner = boxes.begin();
+    if (boxes.size() == 1 && (*cleaner)->noSouvenirs())
+    {
+        for (Box *s : (*cleaner)->boxes)
+        {
+            boxes.push_back(s);
+            s = nullptr;
+        }
+        delete (*cleaner);
+        boxes.erase(cleaner);
+    }
 }
 
 std::ostream &operator<<(std::ostream &os, const Box &b)
