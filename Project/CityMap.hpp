@@ -15,7 +15,6 @@ public:
     std::list<Landmark> bestWalk() { return mostVerticesGivenTotalPrice(start, start, timeLimit); }
     static CityMap readFromFile(const std::string &);
     static std::list<Landmark> findBestWalk(const std::string &);
-    // todo CityMap tests
 };
 
 #endif
