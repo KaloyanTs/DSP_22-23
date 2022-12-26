@@ -5,6 +5,7 @@
 #include "Graph_tests.hpp"
 #include "TrainMap_tests.hpp"
 #include "CityMap_tests.hpp"
+#include "Box_tests.hpp"
 
 // #include "SkipList.hpp"
 // #include "TrainMap.hpp"

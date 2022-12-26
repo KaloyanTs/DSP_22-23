@@ -36,6 +36,7 @@ words TrainMap::solveShortestJourney(const std::string &mapPath, const std::stri
         ifs >> buf1;
         constrains.push_back(buf1);
     }
+    ifs.close();
     return tm.shortestJourney(constrains);
 }
 
