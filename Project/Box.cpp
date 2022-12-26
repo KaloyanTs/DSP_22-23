@@ -102,8 +102,7 @@ Box &Box::addBox(Box *b)
 
 void Box::optimize()
 {
-    // std::clog << *this << "is being optimized...\n";                    // todo
-    // std::clog << this->souvenirs.size() << ' ' << boxes.size() << '\n'; // todo
+
     std::list<Box *>::iterator cleaner = boxes.begin();
     while (cleaner != boxes.end())
     {
