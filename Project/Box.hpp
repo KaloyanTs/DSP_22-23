@@ -22,6 +22,7 @@ public:
     Box &operator=(const Box &) = delete;
     ~Box();
 
+    static std::list<Box> solve(const std::string &path);
     static std::list<Box> readFromFile(const std::string &path);
     void optimize();
     Box &addSouvenir(const std::string &s);

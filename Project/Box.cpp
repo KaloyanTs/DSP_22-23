@@ -137,3 +137,18 @@ std::ostream &operator<<(std::ostream &os, const Box &b)
     b.print(os, 0);
     return os;
 }
+
+std::list<Box> Box::solve(const std::string &path)
+{
+    std::list<Box> res = Box::readFromFile(path);
+    std::list<Box>::iterator iter = res.begin();
+    while (iter != res.end())
+    {
+        iter->optimize();
+        if (iter->empty())
+            res.erase(iter++);
+        else
+            ++iter;
+    }
+    return res;
+}
