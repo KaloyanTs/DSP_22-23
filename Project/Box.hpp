@@ -33,7 +33,7 @@ class Box
 public:
     // todo change char* with strings
     Box(const Label &_name = "Unlabeled") : name(_name), isContained(false) {}
-    Box(const Box &other) : name(other.name), souvenirs(other.souvenirs)
+    Box(const Box &other) : name(other.name), souvenirs(other.souvenirs), isContained(other.isContained)
     {
         for (Box *b : other.boxes)
             boxes.push_back(new Box(*b));
@@ -64,23 +64,28 @@ public:
         for (unsigned i = 0; i < boxCount; ++i)
         {
             ifs >> buf;
-            Box *tmp = new Box(buf);
-            data.insert(signedBox(buf, tmp));
-            Box *current = data[buf];
+            std::cout << "Box name: " << buf << '\t'; // todo
+            Box *current = new Box(buf);
+            data.insert(signedBox(buf, current));
             ifs >> count;
+            std::cout << "Souvenirs count: " << count << '\t'; // todo
             ifs.ignore();
             for (unsigned j = 0; j < count; ++j)
             {
                 ifs >> buf;
+                std::cout << "Souvenir name: " << buf << '\t';
                 current->addSouvenir(buf);
             }
             ifs >> count;
+            std::cout << "SubBoxes count: " << count << '\t'; // todo
             ifs.ignore();
             for (unsigned j = 0; j < count; ++j)
             {
                 ifs >> buf;
+                std::cout << "SubBox name: " << buf << '\t'; // todo
                 q.push(std::pair<Box *, std::string>(current, buf));
             }
+            std::cout << '\n'; // todo
         }
         ifs.close();
 
@@ -96,6 +101,7 @@ public:
         std::map<std::string, Box *>::iterator cleaner = data.begin();
         while (cleaner != data.end())
         {
+            std::cout << cleaner->first << '\n';
             if (cleaner->second->isContained)
                 data.erase(cleaner++);
             else
