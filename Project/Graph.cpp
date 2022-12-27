@@ -3,6 +3,10 @@
 #include <stack>
 #include <tuple>
 
+#define frameFrom std::get<0>
+#define frameLimit std::get<1>
+#define framePath std::get<2>
+
 unsigned Graph::uniquesCount(const std::list<std::string> &x)
 {
     std::set<Vertex> res;
@@ -28,66 +32,40 @@ Graph &Graph::addEdge(const std::string &from, const std::string &to, unsigned w
 }
 std::list<Vertex> Graph::mostVerticesGivenTotalPrice(const std::string &begin, const std::string &end, unsigned limit)
 {
-    const ChildrenList &beginPaths = assArr[begin];
-    std::list<Vertex> tmp, maxL;
-    unsigned maxDiff = 0, currDiff = 0;
-    for (const WeightedPathTo &p : beginPaths)
-    {
-        if (p.second <= limit)
-        {
-            tmp = mostVerticesGivenTotalPrice(p.first, end, limit - p.second);
-            currDiff = uniquesCount(tmp);
-            // todo try using no recursion but a stack
-            if (tmp.back() == end && currDiff > maxDiff)
-            {
-                maxL = std::move(tmp);
-                maxDiff = currDiff;
-            }
-        }
-    }
-    maxL.push_front(begin);
-    return maxL;
-}
-
-#include <iostream> //todo remove
-
-std::list<Vertex> Graph::mostVerticesGivenTotalPrice2(const std::string &begin, const std::string &end, unsigned limit)
-{
-    using V = std ::string;
-    using Frame = std::tuple<V, unsigned, std::list<V>>;
+    using Frame = std::tuple<
+        std ::string,            // from which vertex
+        unsigned,                // currentLimit
+        std::list<std::string>>; // currentPath
     std::stack<Frame> st;
-    std::list<V> maxPath;
-    size_t maxVisited = 1;
+    std::list<std ::string> maxPath;
+    size_t maxVisited = 1, currentVisited;
+    const ChildrenList *beginPaths{nullptr};
     maxPath.push_back(begin);
     Frame current = std::make_tuple(begin, limit, maxPath);
     st.push(current);
     while (!st.empty())
     {
         current = std::move(st.top());
-        std::clog << "From: " << std::get<0>(current) << '\n'; // todo remove
-        std::clog << "\tCurrentPath: ";                        // todo remove
-        for (const std::string &c : std::get<2>(current))      // todo remove
-            std::clog << c << '\t';                            // todo remove
-        std::clog << '\n';                                     // todo remove
         st.pop();
-        if (std::get<0>(current) == end)
+        if (frameFrom(current) == end)
         {
-            size_t currentVisited = Graph::uniquesCount(std::get<2>(current));
+            currentVisited = Graph::uniquesCount(framePath(current));
             if (currentVisited > maxVisited)
             {
-                maxPath = std::move(std::get<2>(current));
+                maxPath = std::move(framePath(current));
                 maxVisited = currentVisited;
             }
         }
-        const ChildrenList *beginPaths = &assArr[std::get<0>(current)];
+        beginPaths = &assArr[frameFrom(current)];
         for (const WeightedPathTo &p : *beginPaths)
         {
-            if (p.second <= limit)
+            if (p.second <= frameLimit(current))
             {
-                std::get<2>(current).push_back(p.first);
+                framePath(current).push_back(p.first);
                 st.push(std::make_tuple(p.first,
-                                        limit - p.second,
-                                        std::move(std::get<2>(current))));
+                                        frameLimit(current) - p.second,
+                                        framePath(current)));
+                framePath(current).pop_back();
             }
         }
     }
