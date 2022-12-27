@@ -20,6 +20,7 @@ public:
     Graph &addVertex(const std::string &);
     Graph &addEdge(const std::string &, const std::string &, unsigned);
     std::list<Vertex> mostVerticesGivenTotalPrice(const std::string &, const std::string &, unsigned);
+    std::list<Vertex> mostVerticesGivenTotalPrice2(const std::string &, const std::string &, unsigned);
     friend std::ostream &operator<<(std::ostream &, const Graph &);
     bool empty() const { return assArr.empty(); }
 };

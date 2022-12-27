@@ -1,5 +1,7 @@
 #include "Graph.hpp"
 #include <set>
+#include <stack>
+#include <tuple>
 
 unsigned Graph::uniquesCount(const std::list<std::string> &x)
 {
@@ -45,6 +47,51 @@ std::list<Vertex> Graph::mostVerticesGivenTotalPrice(const std::string &begin, c
     }
     maxL.push_front(begin);
     return maxL;
+}
+
+#include <iostream> //todo remove
+
+std::list<Vertex> Graph::mostVerticesGivenTotalPrice2(const std::string &begin, const std::string &end, unsigned limit)
+{
+    using V = std ::string;
+    using Frame = std::tuple<V, unsigned, std::list<V>>;
+    std::stack<Frame> st;
+    std::list<V> maxPath;
+    size_t maxVisited = 1;
+    maxPath.push_back(begin);
+    Frame current = std::make_tuple(begin, limit, maxPath);
+    st.push(current);
+    while (!st.empty())
+    {
+        current = std::move(st.top());
+        std::clog << "From: " << std::get<0>(current) << '\n'; // todo remove
+        std::clog << "\tCurrentPath: ";                        // todo remove
+        for (const std::string &c : std::get<2>(current))      // todo remove
+            std::clog << c << '\t';                            // todo remove
+        std::clog << '\n';                                     // todo remove
+        st.pop();
+        if (std::get<0>(current) == end)
+        {
+            size_t currentVisited = Graph::uniquesCount(std::get<2>(current));
+            if (currentVisited > maxVisited)
+            {
+                maxPath = std::move(std::get<2>(current));
+                maxVisited = currentVisited;
+            }
+        }
+        const ChildrenList *beginPaths = &assArr[std::get<0>(current)];
+        for (const WeightedPathTo &p : *beginPaths)
+        {
+            if (p.second <= limit)
+            {
+                std::get<2>(current).push_back(p.first);
+                st.push(std::make_tuple(p.first,
+                                        limit - p.second,
+                                        std::move(std::get<2>(current))));
+            }
+        }
+    }
+    return maxPath;
 }
 
 std::ostream &operator<<(std::ostream &os, const Graph &g)
