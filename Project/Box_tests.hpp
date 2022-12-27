@@ -20,7 +20,7 @@ TEST_CASE("Printing a box")
 
 TEST_CASE("Reading boxes from text file")
 {
-    std::list<Box> l = Box::readFromFile("boxesdata.txt");
+    std::list<Box> l = Box::readFromFile("boxesList.txt");
     std::ostringstream s;
     for (const Box &b : l)
         std::clog << b;
@@ -31,7 +31,7 @@ TEST_CASE("Reading boxes from text file")
 
 TEST_CASE("Optimizing boxes")
 {
-    std::list<Box> l = Box::readFromFile("boxesdata.txt");
+    std::list<Box> l = Box::readFromFile("boxesList.txt");
     std::ostringstream s;
     for (Box &b : l)
     {
