@@ -17,6 +17,8 @@ void TaskSolver::a()
     std::cout << "Here is the shortest journey:\n";
     for (const std::string &c : res)
         std::cout << c << '\n';
+    std::cin.ignore();
+    std::cin.get();
 }
 
 void TaskSolver::b()
@@ -28,6 +30,8 @@ void TaskSolver::b()
     std::cout << "Here is the optimal walk:\n";
     for (const std::string &c : res)
         std::cout << c << '\n';
+    std::cin.ignore();
+    std::cin.get();
 }
 
 void TaskSolver::c()
@@ -36,4 +40,5 @@ void TaskSolver::c()
     std::cout << "The optimal boxes configuration is:\n";
     for (const Box &b : l)
         std::cout << b;
+    std::cin.get();
 }
