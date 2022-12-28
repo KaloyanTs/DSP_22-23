@@ -244,6 +244,103 @@ std::string maxOcc(const NodeEl<char> *root, char c)
     return maxOccRec(root, c, resOcc);
 }
 
+struct TreeNode
+{
+    std::string value;
+    std::vector<TreeNode *> children;
+    TreeNode(const std::string &_value) : value(_value) {}
+    void insert(TreeNode *child) { children.push_back(child); }
+    bool isLeaf() const { return children.empty(); }
+};
+
+void printTree(const TreeNode *root)
+{
+    if (!root)
+    {
+        std::cout << "()";
+        return;
+    }
+    if (root->isLeaf())
+    {
+        std::cout << root->value;
+        return;
+    }
+    std::cout << '(';
+    std::cout << ' ' << root->value << ' ';
+    for (const TreeNode *c : root->children)
+    {
+        printTree(c);
+        std::cout << ' ';
+    }
+    std::cout << ')';
+}
+
+void clearTree(TreeNode *&root)
+{
+    for (TreeNode *&c : root->children)
+        clearTree(c);
+    delete root;
+    root = nullptr;
+}
+
+TreeNode *read(std::ifstream &ifs)
+{
+    std::queue<TreeNode *> q;
+    TreeNode *res, *current, *tmp;
+    std::string buf;
+    ifs >> buf;
+    ifs.ignore();
+    res = new TreeNode(buf);
+    q.push(res);
+    while (!q.empty() && !ifs.eof())
+    {
+        current = q.front();
+        q.pop();
+        ifs >> buf;
+        while (!buf.empty() && buf != "*")
+        {
+            tmp = new TreeNode(buf);
+            current->insert(tmp);
+            q.push(tmp);
+            if (ifs.peek() == '\n')
+                break;
+            ifs >> buf;
+        }
+    }
+    return res;
+}
+
+std::string rightmostRec(const TreeNode *root, size_t &from, size_t current)
+{
+    if (!root)
+        return std::string();
+    std::string res, tmp;
+    std::vector<TreeNode *>::const_reverse_iterator i = root->children.crbegin();
+    if (current >= from)
+    {
+        res += root->value;
+        from = current + 1;
+    }
+    while (i != root->children.crend())
+    {
+        tmp = rightmostRec(*i, from, current + 1);
+        if (!tmp.empty())
+        {
+            if (!res.empty())
+                res += ' ';
+            res += tmp;
+        }
+        ++i;
+    }
+    return res;
+}
+
+std::string rightmost(const TreeNode *root)
+{
+    size_t level = 0;
+    return rightmostRec(root, level, level);
+}
+
 int main()
 {
 
@@ -306,12 +403,21 @@ int main()
     printTree(t2);
     std::cout << '\n';
     std::string maxPath2 = maxOcc(t2, 'c');
-    // todo repair
     std::string::const_reverse_iterator i2 = maxPath2.crbegin();
     while (i2 != maxPath2.crend())
         std::cout << *i2++ << ' ';
     std::cout << '\n';
     clearTree(t2);
+
+    ifs.open("arbTree.txt");
+    if (!ifs.is_open())
+        return -1;
+    TreeNode *t3 = read(ifs);
+    ifs.close();
+    printTree(t3);
+    std::cout << '\n';
+    std::cout << rightmost(t3) << '\n';
+    clearTree(t3);
 
     return 0;
 }
