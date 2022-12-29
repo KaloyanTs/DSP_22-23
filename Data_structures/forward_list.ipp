@@ -91,11 +91,11 @@ void list<T>::push_front(const T &data)
 {
     if (!head)
     {
-        head = tail = new StackEl<T>(data);
+        head = tail = new ListEl<T>(data);
         ++size;
         return;
     }
-    StackEl<T> *newEl = new StackEl<T>(data);
+    ListEl<T> *newEl = new ListEl<T>(data);
     newEl->next = head;
     head = newEl;
     ++size;
