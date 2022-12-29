@@ -1,22 +1,45 @@
 #include "doctest.h"
-#include "stack.ipp"
+#include "linked_stack.ipp"
+#include "static_stack.ipp"
+#include "dynamic_stack.ipp"
 
-TEST_CASE("След създаване на стек той е празен")
+#define AllStacks StaticStack<int>, LinkedStack<int>, DynamicStack<int>
+
+TEST_CASE_TEMPLATE("След създаване на стек той е празен", Stack, AllStacks)
 {
-    stack<int> s;
+    Stack s;
     CHECK(s.empty());
 }
 
-TEST_CASE("Стекът не е празен след добавяне")
+TEST_CASE_TEMPLATE("Конструктор за копиране", Stack, AllStacks)
 {
-    stack<int> s;
+    Stack s1;
+    s1.push(3);
+    s1.push(2);
+    s1.push(1);
+    Stack s2 = s1;
+    CHECK_EQ(s1.top(), s2.top());
+    s1.pop();
+    s2.pop();
+    CHECK_EQ(s1.top(), s2.top());
+    s1.pop();
+    s2.pop();
+    CHECK_EQ(s1.top(), s2.top());
+    s1.pop();
+    s2.pop();
+    CHECK_EQ(s1.empty(), s2.empty());
+}
+
+TEST_CASE_TEMPLATE("Стекът не е празен след добавяне", Stack, AllStacks)
+{
+    Stack s;
     s.push(10);
     CHECK(!s.empty());
 }
 
-TEST_CASE("Елементите се изключват в ред обратен на включване")
+TEST_CASE_TEMPLATE("Елементите се изключват в ред обратен на включване", Stack, AllStacks)
 {
-    stack<int> s;
+    Stack s;
     s.push(10);
     s.push(20);
     s.push(30);
@@ -30,9 +53,9 @@ TEST_CASE("Елементите се изключват в ред обратен
     CHECK(s.empty());
 }
 
-TEST_CASE("Top връща последно включения елемент")
+TEST_CASE_TEMPLATE("Top връща последно включения елемент", Stack, AllStacks)
 {
-    stack<int> s;
+    Stack s;
     s.push(10);
     CHECK_EQ(s.top(), 10);
     s.push(20);
@@ -41,15 +64,34 @@ TEST_CASE("Top връща последно включения елемент")
     CHECK_EQ(s.top(), 10);
 }
 
-TEST_CASE("LinkedStack: неуспех при опит за поглеждане в празен стек")
+TEST_CASE_TEMPLATE("Изключение при опит за поглеждане или изключване от празен стек", Stack, AllStacks)
 {
-    stack<int> s;
-    CHECK_THROWS(s.top());
-}
-
-TEST_CASE("Изключение при опит за поглеждане в или изключване от празен стек")
-{
-    stack<int> s;
+    Stack s;
     CHECK_THROWS_AS(s.top(), std::runtime_error);
     CHECK_THROWS_AS(s.pop(), std::runtime_error);
+}
+
+TEST_CASE_TEMPLATE("Размяна на съдържанието на два стека", Stack, AllStacks)
+{
+    Stack s1;
+    s1.push(3);
+    s1.push(2);
+    s1.push(1);
+    Stack s2;
+    s2.push(5);
+    s2.push(4);
+    s1.swap(s2);
+    CHECK_EQ(s1.top(), 4);
+    s1.pop();
+    CHECK_EQ(s1.top(), 5);
+    s1.pop();
+    CHECK(s1.empty());
+
+    CHECK_EQ(s2.top(), 1);
+    s2.pop();
+    CHECK_EQ(s2.top(), 2);
+    s2.pop();
+    CHECK_EQ(s2.top(), 3);
+    s2.pop();
+    CHECK(s2.empty());
 }

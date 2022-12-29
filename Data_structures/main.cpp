@@ -1,7 +1,4 @@
 #include <iostream>
-#include "stack.ipp"
-#include "queue.ipp"
-#include "forward_list.ipp"
 
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest.h"
