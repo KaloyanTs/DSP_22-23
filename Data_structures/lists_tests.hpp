@@ -3,9 +3,10 @@
 
 #include "doctest.h"
 #include "forward_list.ipp"
+#include "list.ipp"
 #include <cmath>
 
-#define AllLists ForwardList<int>
+#define AllLists ForwardList<int>, List<int>
 
 TEST_CASE_TEMPLATE("При създаване на списък той е празен",
                    List, AllLists)
@@ -146,6 +147,41 @@ TEST_CASE_TEMPLATE("Коректно поведение на оператора 
     l1.pop_front();
     CHECK(l1.empty());
     CHECK(l2.empty());
+}
+
+TEST_CASE("Последователно добавяне на елементи в двусвързан списък и обхождането му отзад напред")
+{
+    List<int> l;
+    for (int i = 1; i <= 10; i++)
+        l.push_back(i);
+
+    SUBCASE("iterator")
+    {
+        int i = 1;
+        for (List<int>::Iterator it = l.begin(); it; ++it)
+            CHECK_EQ(*it, i++);
+        CHECK_EQ(i, 11);
+    }
+
+    SUBCASE("reverse iterator")
+    {
+        int i = 10;
+        for (List<int>::ReverseIterator it = l.rbegin(); it; ++it)
+            CHECK_EQ(*it, i--);
+        CHECK_EQ(i, 0);
+    }
+}
+
+TEST_CASE("Последователно добавяне на елементи в списъка от началото и обхождането му отзад напред")
+{
+    List<int> l;
+    for (int i = 1; i <= 10; i++)
+        l.push_front(i);
+
+    int i = 1;
+    for (List<int>::ReverseIterator it = l.rbegin(); it; ++it)
+        CHECK_EQ(*it, i++);
+    CHECK_EQ(i, 11);
 }
 
 #endif

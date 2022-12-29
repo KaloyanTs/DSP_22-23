@@ -5,4 +5,4 @@
 
 #include "stack_tests.hpp"
 #include "queue_tests.hpp"
-#include "forward_list_tests.hpp"
+#include "lists_tests.hpp"
