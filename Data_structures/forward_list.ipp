@@ -5,115 +5,164 @@
 #include <stdexcept>
 
 template <typename T>
-struct ListEl
+struct ForwardListEl
 {
     T data;
-    ListEl *next;
-    ListEl(const T &d) : data(d), next(nullptr) {}
+    ForwardListEl *next;
+    ForwardListEl(const T &d, ForwardListEl *_next = nullptr) : data(d), next(_next) {}
 };
 
 template <typename T>
-struct list
+struct ForwardList
 {
-    ListEl<T> *head, *tail;
-    size_t size;
-    list() : head(nullptr), tail(nullptr), size(0) {}
-    list(const T &d) : head(new ListEl<T>(d)), tail(head), size(1) {}
-    list(const list &) = delete;
-    list &operator=(const list &) = delete;
-    void print() const;
+public:
+    class Iterator
+    {
+        ForwardListEl<T> *ptr;
+
+    public:
+        Iterator(ForwardListEl<T> *_ptr = nullptr) : ptr(_ptr) {}
+        T &operator*() { return ptr->data; }
+        Iterator &operator++()
+        {
+            ptr = ptr->next;
+            return *this;
+        }
+        Iterator operator++(int)
+        {
+            Iterator tmp = *this;
+            ++*this;
+            return tmp;
+        }
+        bool operator==(const Iterator &other) { return ptr == other.ptr; }
+        bool operator!=(const Iterator &other) { return ptr != other.ptr; }
+        operator bool() { return ptr; }
+        friend class ForwardList<T>;
+    };
+
+private:
+    ForwardListEl<T> *head, *tail;
+    size_t mSize;
+
+public:
+    ForwardList() : head(nullptr), tail(nullptr), mSize(0) {}
+    ForwardList(const T &d) : head(new ForwardListEl<T>(d)), tail(head), mSize(1) {}
+    ForwardList(const ForwardList &) = delete;
+    ForwardList &operator=(const ForwardList &) = delete;
+    Iterator begin() const { return Iterator(head); }
+    Iterator end() const { return Iterator(nullptr); }
     void push_front(const T &data);
     void push_back(const T &data);
     void pop_front();
     T front() const;
     T back() const;
     bool empty() const { return !head; }
-    size_t getSize() const { return size; }
-    ~list();
+    size_t size() const { return mSize; }
+    void insertAfter(const Iterator &pos, const T &el)
+    {
+        pos.ptr->next = new ForwardListEl<T>(el, pos.ptr->next);
+        ++mSize;
+    }
+    void eraseAfter(Iterator &pos)
+    {
+        if (!pos)
+            return;
+        if (pos->ptr == tail)
+        {
+            delete tail;
+            tail = pos->ptr;
+            --size;
+            return;
+        }
+        Iterator tmp = pos++;
+        tmp.ptr->next = pos.ptr->next;
+        delete pos.ptr;
+        pos = ++tmp;
+        --size;
+    }
+    void clear()
+    {
+        if (!head)
+            return;
+        tail = head;
+        do
+        {
+            head = head->next;
+            delete tail;
+            tail = head;
+        } while (head);
+    }
+    void swap(ForwardList &other)
+    {
+        std::swap(head, other.head);
+        std::swap(tail, other.tail);
+        std::swap(mSize, other.mSize);
+    }
+    ~ForwardList();
 };
 
 template <typename T>
-void list<T>::print() const
+ForwardList<T>::~ForwardList()
 {
-    ListEl<T> *end = head;
-    while (end)
-    {
-        std::cout << end->data << '\n';
-        end = end->next;
-    }
-    std::cout << '\n';
+    clear();
 }
 
 template <typename T>
-list<T>::~list()
-{
-    if (!head)
-        return;
-    tail = head;
-    do
-    {
-        head = head->next;
-        delete tail;
-        tail = head;
-    } while (head);
-}
-
-template <typename T>
-void list<T>::push_back(const T &data)
+void ForwardList<T>::push_back(const T &data)
 {
     if (!head)
     {
-        head = tail = new ListEl<T>(data);
-        ++size;
+        head = tail = new ForwardListEl<T>(data);
+        ++mSize;
         return;
     }
-    ListEl<T> *newEl = new ListEl<T>(data);
+    ForwardListEl<T> *newEl = new ForwardListEl<T>(data);
     tail->next = newEl;
     tail = tail->next;
-    ++size;
+    ++mSize;
 }
 
 template <typename T>
-void list<T>::pop_front()
+void ForwardList<T>::pop_front()
 {
     if (!head)
-        throw std::runtime_error("empty list");
-    ListEl<T> *prev = head;
+        throw std::runtime_error("empty ForwardList");
+    ForwardListEl<T> *prev = head;
     if (tail == head)
         tail = nullptr;
     head = head->next;
     delete prev;
-    --size;
+    --mSize;
 }
 
 template <typename T>
-void list<T>::push_front(const T &data)
+void ForwardList<T>::push_front(const T &data)
 {
     if (!head)
     {
-        head = tail = new ListEl<T>(data);
-        ++size;
+        head = tail = new ForwardListEl<T>(data);
+        ++mSize;
         return;
     }
-    ListEl<T> *newEl = new ListEl<T>(data);
+    ForwardListEl<T> *newEl = new ForwardListEl<T>(data);
     newEl->next = head;
     head = newEl;
-    ++size;
+    ++mSize;
 }
 
 template <typename T>
-T list<T>::front() const
+T ForwardList<T>::front() const
 {
     if (!head)
-        throw std::runtime_error("empty list");
+        throw std::runtime_error("empty ForwardList");
     return head->data;
 }
 
 template <typename T>
-T list<T>::back() const
+T ForwardList<T>::back() const
 {
     if (!head)
-        throw std::runtime_error("empty list");
+        throw std::runtime_error("empty ForwardList");
     return tail->data;
 }
 
