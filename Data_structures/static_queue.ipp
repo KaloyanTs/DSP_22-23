@@ -2,68 +2,71 @@
 #define __STATIC_QUEUE_IPP
 #include <cstddef>
 #include <exception>
-//todo
+
 template <typename T>
 class StaticQueue
 {
     static const size_t MAX_SIZE = 64;
     T arr[MAX_SIZE];
-    size_t mSize;
+    int mFront, mBack;
 
 public:
-    StaticQueue() : mSize(0) {}
+    StaticQueue() : mFront(0), mBack(0) {}
     StaticQueue(const StaticQueue &other) = default;
     StaticQueue &operator=(const StaticQueue &other) = default;
     ~StaticQueue() = default;
-    bool empty() const { return !mSize; }
-    const T &top() const;
-    T &top();
-    size_t size() const { return mSize; }
+    bool empty() const { return mBack == mFront; }
+    const T &front() const;
+    T &front();
+    size_t size() const { return (mBack - mFront + MAX_SIZE) % MAX_SIZE; }
     void push(const T &value);
     void push(T &&value);
     void pop();
     void swap(StaticQueue &other);
 };
 template <typename T>
-const T &StaticQueue<T>::top() const
+const T &StaticQueue<T>::front() const
 {
     if (empty())
-        throw std::logic_error("the stack is empty...");
-    return arr[mSize - 1];
+        throw std::logic_error("the queue is empty...");
+    return arr[mFront];
 }
 template <typename T>
-T &StaticQueue<T>::top()
+T &StaticQueue<T>::front()
 {
     if (empty())
-        throw std::runtime_error("the stack is empty...");
-    return arr[mSize - 1];
+        throw std::runtime_error("the queue is empty...");
+    return arr[mFront];
 }
 template <typename T>
 void StaticQueue<T>::push(const T &value)
 {
-    if (mSize >= MAX_SIZE)
-        throw std::runtime_error("stack overflow...");
-    arr[mSize++] = value;
+    if ((mFront - mBack - 1) % MAX_SIZE == 0)
+        throw std::runtime_error("queue overflow...");
+    arr[mBack++] = value;
+    mBack %= MAX_SIZE;
 }
 template <typename T>
 void StaticQueue<T>::push(T &&value)
 {
-    if (mSize >= MAX_SIZE)
-        throw std::runtime_error("stack overflow...");
-    arr[mSize++] = value;
+    if ((mFront - mBack - 1) % MAX_SIZE == 0)
+        throw std::runtime_error("queue overflow...");
+    arr[mBack++] = value;
+    mBack %= MAX_SIZE;
 }
 template <typename T>
 void StaticQueue<T>::pop()
 {
     if (empty())
-        throw std::runtime_error("the stack is empty...");
-    --mSize;
+        throw std::runtime_error("the queue is empty...");
+    mFront = (mFront + 1) % MAX_SIZE;
 }
 template <typename T>
 void StaticQueue<T>::swap(StaticQueue<T> &other)
 {
     std::swap(arr, other.arr);
-    std::swap(mSize, other.mSize);
+    std::swap(mFront, other.mFront);
+    std::swap(mBack, other.mBack);
 }
 
 #endif

@@ -1,10 +1,9 @@
 #include "doctest.h"
 #include "static_queue.ipp"
-#include "dynamic_queue.ipp"
 #include "linked_queue.ipp"
 
-// StaticQueue<int>, DynamicQueue<int>,
-#define AllQueues LinkedQueue<int>
+// , DynamicQueue<int>,
+#define AllQueues StaticQueue<int>, LinkedQueue<int>
 
 TEST_CASE_TEMPLATE("След създаване на опашка, тя е празна", Queue, AllQueues)
 {
