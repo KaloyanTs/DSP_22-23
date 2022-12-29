@@ -1,39 +1,39 @@
-#ifndef __QUEUE_HPP
-#define __QUEUE_HPP
+#ifndef __LINKED_QUEUE_HPP
+#define __LINKED_QUEUE_HPP
 
 #include <cstddef>
 #include <stdexcept>
 
 template <typename T>
-struct QueueEl
+struct LinkedQueueEl
 {
     T data;
-    QueueEl *next;
-    QueueEl(const T &d) : data(d), next(nullptr) {}
+    LinkedQueueEl *next;
+    LinkedQueueEl(const T &d) : data(d), next(nullptr) {}
 };
 
 template <typename T>
-struct queue
+struct LinkedQueue
 {
-    QueueEl<T> *head, *tail;
+    LinkedQueueEl<T> *head, *tail;
     size_t size;
-    queue() : head(nullptr), tail(nullptr), size(0) {}
-    queue(const T &d) : head(new QueueEl<T>(d)), tail(head), size(1) {}
-    queue(const queue &) = delete;
-    queue &operator=(const queue &) = delete;
+    LinkedQueue() : head(nullptr), tail(nullptr), size(0) {}
+    LinkedQueue(const T &d) : head(new LinkedQueueEl<T>(d)), tail(head), size(1) {}
+    LinkedQueue(const LinkedQueue &) = delete;
+    LinkedQueue &operator=(const LinkedQueue &) = delete;
     void print() const;
     void push(const T &data);
     void pop();
     T front() const;
     bool empty() const { return !head; }
     size_t getSize() const { return size; }
-    ~queue();
+    ~LinkedQueue();
 };
 
 template <typename T>
-void queue<T>::print() const
+void LinkedQueue<T>::print() const
 {
-    QueueEl<T> *end = head;
+    LinkedQueueEl<T> *end = head;
     while (end)
     {
         std::cout << end->data << '\n';
@@ -43,7 +43,7 @@ void queue<T>::print() const
 }
 
 template <typename T>
-queue<T>::~queue()
+LinkedQueue<T>::~LinkedQueue()
 {
     if (!head)
         return;
@@ -57,26 +57,26 @@ queue<T>::~queue()
 }
 
 template <typename T>
-void queue<T>::push(const T &data)
+void LinkedQueue<T>::push(const T &data)
 {
     if (!head)
     {
-        head = tail = new QueueEl<T>(data);
+        head = tail = new LinkedQueueEl<T>(data);
         ++size;
         return;
     }
-    QueueEl<T> *newEl = new QueueEl<T>(data);
+    LinkedQueueEl<T> *newEl = new LinkedQueueEl<T>(data);
     tail->next = newEl;
     tail = tail->next;
     ++size;
 }
 
 template <typename T>
-void queue<T>::pop()
+void LinkedQueue<T>::pop()
 {
     if (!head)
-        throw std::runtime_error("empty queue");
-    QueueEl<T> *prev = head;
+        throw std::runtime_error("empty LinkedQueue");
+    LinkedQueueEl<T> *prev = head;
     if (tail == head)
         tail = nullptr;
     head = head->next;
@@ -85,10 +85,10 @@ void queue<T>::pop()
 }
 
 template <typename T>
-T queue<T>::front() const
+T LinkedQueue<T>::front() const
 {
     if (!head)
-        throw std::runtime_error("empty queue");
+        throw std::runtime_error("empty LinkedQueue");
     return head->data;
 }
 
