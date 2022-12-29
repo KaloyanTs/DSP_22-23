@@ -30,7 +30,7 @@ void print(const Node *root)
     std::cout << ')';
 }
 
-void clear(Node *root)
+void clear(Node *&root)
 {
     if (!root)
         return;
@@ -131,14 +131,97 @@ int equalLevel(const Node *t1, const Node *t2)
     return -1;
 }
 
-void exchangeEvens(const Node *&root)
+void insert(Node *&root, int val)
 {
-    
+    if (!root)
+    {
+        root = new Node(val);
+        return;
+    }
+    if (val <= root->value)
+        insert(root->left, val);
+    else
+        insert(root->right, val);
+}
+
+int removeEvens(Node *&root)
+{
+    if (!root)
+        return 0;
+    int lRes = removeEvens(root->left);
+    int rRes = removeEvens(root->right);
+    if (root->value % 2)
+        return lRes + rRes;
+    int res = root->value + lRes + rRes;
+    if (root->isLeaf() && root->value % 2 == 0)
+    {
+        delete root;
+        root = nullptr;
+        return res;
+    }
+    Node *tmp = root->left;
+    if (!tmp)
+    {
+        tmp = root->right;
+        if (!tmp->left)
+        {
+            tmp->left = root->left;
+            delete root;
+            root = tmp;
+            return res;
+        }
+        Node *par = tmp;
+        tmp = tmp->left;
+        while (tmp->left)
+        {
+            par = par->left;
+            tmp = tmp->left;
+        }
+        par->left = nullptr;
+        tmp->left = root->left;
+        tmp->right = root->right;
+        delete root;
+        root = tmp;
+        return res;
+    }
+    if (!tmp->right)
+    {
+        tmp->right = root->right;
+        delete root;
+        root = tmp;
+        return res;
+    }
+    Node *par = tmp;
+    tmp = tmp->right;
+    while (tmp->right)
+    {
+        par = par->right;
+        tmp = tmp->right;
+    }
+    par->right = nullptr;
+    tmp->right = root->right;
+    tmp->left = root->left;
+    delete root;
+    root = tmp;
+    return res;
+}
+
+void exchangeEvens(Node *&root)
+{
+    if (!root || root->isLeaf())
+        return;
+    int sum = removeEvens(root);
+    insert(root, sum);
 }
 
 int main()
 {
-    Node *t1 = new Node(5, new Node(3, new Node(4), new Node(3)), new Node(2, new Node(3)));
+    Node *t1 = new Node(5,
+                        new Node(3,
+                                 new Node(4),
+                                 new Node(3)),
+                        new Node(2,
+                                 new Node(3)));
     Node *t2 = new Node(6, new Node(7, new Node(4), new Node(3)), new Node(2, nullptr, new Node(3)));
     print(t1);
     std::cout << '\n';
@@ -147,5 +230,24 @@ int main()
     std::cout << equalLevel(t1, t2) << '\n';
     clear(t1);
     clear(t2);
+
+    insert(t1, 6);
+    insert(t1, 1);
+    insert(t1, 7);
+    insert(t1, 4);
+    insert(t1, 11);
+    insert(t1, 5);
+    insert(t1, -6);
+    insert(t1, 8);
+    insert(t1, 13);
+    insert(t1, 10);
+    insert(t1, -16);
+    insert(t1, 2);
+    print(t1);
+    std::cout << '\n';
+    exchangeEvens(t1);
+    print(t1);
+    std::cout << '\n';
+
     return 0;
 }
