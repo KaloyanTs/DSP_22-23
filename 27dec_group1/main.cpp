@@ -210,8 +210,7 @@ void exchangeEvens(Node *&root)
 {
     if (!root || root->isLeaf())
         return;
-    int sum = removeEvens(root);
-    insert(root, sum);
+    insert(root, removeEvens(root));
 }
 
 int main()
