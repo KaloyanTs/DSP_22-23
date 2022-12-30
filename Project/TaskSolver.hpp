@@ -13,6 +13,7 @@ public:
     static void a();
     static void b();
     static void c();
+    static void total();
 };
 
 #endif

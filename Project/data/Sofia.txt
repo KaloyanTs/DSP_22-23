@@ -1,0 +1,12 @@
+9 10
+Railstation Nevski 30
+Railstation BoyanskaCyrkwa 43
+ArtGallery Nevski 5
+ArtGallery HistoricalMuseum 14
+ArtGallery SvetaSofia 21
+Borisova SvetaSofia 15
+Nevski Paradise 32
+Paradise SvetaSofia 19
+Railstation BusStation 3
+BusStation BoyanskaCyrkwa 22
+118
