@@ -1,5 +1,5 @@
 3 3
-RailStation Center 13
+Railstation Center 13
 Center Dzhamia 3
-Dzhamia RailStation 11
+Dzhamia Railstation 9
 26
