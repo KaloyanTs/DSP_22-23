@@ -6,49 +6,59 @@
 #include "binary_tree.ipp"
 #include "binary_search_tree.ipp"
 
-using IntTree = BinaryTree<int>;
+#define AllTrees BinaryTree<int>, BinarySearchTree<int>
 
-TEST_CASE_TEMPLATE("Извеждане на примерно дърво на две нива")
+TEST_CASE_TEMPLATE("Извеждане на примерно дърво на две нива", Tree, AllTrees)
 {
-    IntTree t 
-
+    Tree t(1, Tree(2, Tree(3), Tree(4)), Tree(5, Tree(), Tree(6, Tree(7))));
     std::ostringstream os;
     t.print(os);
-    CHECK_EQ(os.str(), "(1 (2) (9) (10))");
+    CHECK_EQ(os.str(), "(1 (2 (3) (4)) (5 () (6 (7) ())))");
 }
 
-TEST_CASE_TEMPLATE("Работа с примерно дърво на четири нива")
+TEST_CASE_TEMPLATE("Работа с примерно дърво на четири нива", Tree, AllTrees)
 {
-    IntTree t =
-        IntTree(1)
-        << (IntTree(2)
-            << IntTree(3)
-            << (IntTree(4)
-                << IntTree(5)
-                << IntTree(6))
-            << IntTree(7)
-            << IntTree(8))
-        << IntTree(9)
-        << IntTree(10);
+    Tree t = Tree(1, Tree(2, Tree(3), Tree(4, Tree(5), Tree(6))), Tree(7, Tree(8), Tree(9, Tree(10))));
 
     SUBCASE("Извеждане")
     {
         std::ostringstream os;
         t.print(os);
-        CHECK_EQ(os.str(), "(1 (2 (3) (4 (5) (6)) (7) (8)) (9) (10))");
+        CHECK_EQ(os.str(), "(1 (2 (3) (4 (5) (6))) (7 (8) (9 (10) ())))");
     }
 
     SUBCASE("Дълбочина")
     {
         CHECK_EQ(t.depth(), 4);
     }
-
-    SUBCASE("Ширина")
-    {
-        CHECK_EQ(t.breadth(), 4);
-    }
 }
 
-TEST_CASE_TEMPLATE("Празният конструк")
+TEST_CASE("Наредено двоично дърво")
+{
+    BinarySearchTree<int> t(5);
+    t.insert(3).insert(7).insert(4).insert(3).insert(9).insert(6).insert(8).insert(5);
+
+    SUBCASE("Принтиране")
+    {
+        std::ostringstream os;
+        t.print(os);
+        CHECK_EQ(os.str(), "(5 (3 (3) (4 () (5))) (7 (6) (9 (8))))");
+    }
+
+    SUBCASE("Търсене на елемент")
+    {
+        CHECK(t.search(4));
+        CHECK(t.search(8));
+        CHECK_FALSE(t.search(1));
+        CHECK_FALSE(t.search(10));
+    }
+
+    SUBCASE("Дървото е наредено")
+    {
+        std::ostringstream os;
+        t.leftToRight(os);
+        CHECK_EQ(os.str(), "3 3 4 5 5 6 7 8 9");
+    }
+}
 
 #endif
