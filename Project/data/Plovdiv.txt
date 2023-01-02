@@ -1,0 +1,8 @@
+6 6
+Railstation OldTown 15
+OldTown Alyosha 18
+Railstation RomanTheatre 12
+SingingFountains Alyosha 14
+Kapana RomanTheatre 7
+OldTown Kapana 9
+64

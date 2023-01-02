@@ -35,12 +35,18 @@ TEST_CASE("Walk through cities")
 
     std::list<std::string> res = g.mostVerticesGivenTotalPrice("Railstation", "Railstation", 68);
 
-    // for (const std::string &city : res)
-    //     std::clog << city << '\t';
-    // std::clog << '\n';
-    // todo test for the names and order of the cities
+    SUBCASE("Best walk")
+    {
+        std::ostringstream s;
+        for (const std::string &city : res)
+            s << city << '\t';
+        CHECK_EQ(s.str(), "Railstation\tArtGallery\tAntiqueTheatre\tArtGallery\tDzhumayaSquare\tRomanStadium\tRailstation\t");
+    }
 
-    CHECK_EQ(Graph::uniquesCount(res), 5);
+    SUBCASE("They must be 5")
+    {
+        CHECK_EQ(Graph::uniquesCount(res), 5);
+    }
 }
 
 #endif
