@@ -14,4 +14,12 @@ TEST_CASE("They can visit at most 5 landmarks in Stara Zagora.")
     CHECK_EQ(Graph::uniquesCount(res), 5);
 }
 
+TEST_CASE("They can not visit only the Center in Yambol.")
+{
+    std::list<std::string> res = CityMap::findBestWalk("Yambol.txt");
+    for (const std::string &city : res)
+        CHECK_NE(city, "Center");
+    CHECK_EQ(Graph::uniquesCount(res), 3);
+}
+
 #endif

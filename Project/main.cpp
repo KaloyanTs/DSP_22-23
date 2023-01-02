@@ -12,7 +12,6 @@
 int main()
 {
     TaskSolver::total();
-    // todo debug for Burgas and Yambol
     std::cout << "Enter any key to exit...";
     std::cin.ignore();
     std::cin.get();
