@@ -11,7 +11,7 @@ TEST_CASE("Journey through sequence of cities.")
 {
     SUBCASE("Journey through Plovdiv, StaraZagora and Yambol.")
     {
-        std::list<std::string> res = TrainMap::solveShortestJourney("SofiaBurgas.txt", "test1.txt");
+        std::list<std::string> res = TrainMap::solveShortestJourney("SofiaBurgas.txt", "AnyaVanko.txt");
         std::ostringstream s;
         for (const std::string &city : res)
             s << city << '\n';
