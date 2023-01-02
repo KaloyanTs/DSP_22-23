@@ -9,7 +9,17 @@ void TaskSolver::total()
     std::cin >> pathToMap;
     std::cout << "Enter path to desired cities to visit file: ";
     std::cin >> pathToConstrains;
-    std::list<std::string> res = TrainMap::solveShortestJourney(pathToMap, pathToConstrains);
+    std::list<std::string> res;
+    try
+    {
+        res = TrainMap::solveShortestJourney(pathToMap, pathToConstrains);
+    }
+    catch (const std::exception &err)
+    {
+        std::cout << err.what() << '\n';
+        total();
+        return;
+    }
     std::cout << "Here is the shortest journey:\n";
     for (const std::string &c : res)
         std::cout << c << '\n';

@@ -6,7 +6,7 @@ words TrainMap::solveShortestJourney(const std::string &mapPath, const std::stri
     std::ifstream ifs;
     ifs.open(std::string("data\\") + mapPath);
     if (!ifs.is_open())
-        return words();
+        throw std::runtime_error("Map not found!");
     unsigned count;
     ifs >> count;
     ifs.ignore();
@@ -25,16 +25,17 @@ words TrainMap::solveShortestJourney(const std::string &mapPath, const std::stri
     }
     ifs.close();
 
-    ifs.open(std::string("data\\") + constrainsPath);
-    if (!ifs.is_open())
-        return words();
     std::list<std::string> constrains;
-    while (!ifs.eof())
+    ifs.open(std::string("data\\") + constrainsPath);
+    if (ifs.is_open())
     {
-        ifs >> buf1;
-        constrains.push_back(buf1);
+        while (!ifs.eof())
+        {
+            ifs >> buf1;
+            constrains.push_back(buf1);
+        }
+        ifs.close();
     }
-    ifs.close();
     return tm.shortestJourney(constrains);
 }
 
