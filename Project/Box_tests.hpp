@@ -31,15 +31,29 @@ TEST_CASE("Reading boxes from text file")
 
 TEST_CASE("Optimizing boxes")
 {
-    std::list<Box> l = Box::readFromFile("boxesList.txt");
-    std::ostringstream s;
-    for (Box &b : l)
+    SUBCASE("Example from description")
     {
-        b.optimize();
-        s << b;
+        std::list<Box> l = Box::readFromFile("boxesList.txt");
+        std::ostringstream s;
+        for (Box &b : l)
+        {
+            b.optimize();
+            s << b;
+        }
+        CHECK_EQ(s.str(), "PlovdivBox:\n\tMagnet\n\tBook\n\tDrawings:\n\t\tOldPlovdiv\n\tPlates:\n\t\tDecorativePlate\nStaraZagoraBox:\n\tPostcard\n\tFigurines:\n\t\tAncientFigurine\n\tCups:\n\t\tTraditionalCup\n");
     }
-    CHECK_EQ(s.str(), "PlovdivBox:\n\tMagnet\n\tBook\n\tDrawings:\n\t\tOldPlovdiv\n\tPlates:\n\t\tDecorativePlate\nStaraZagoraBox:\n\tPostcard\n\tFigurines:\n\t\tAncientFigurine\n\tCups:\n\t\tTraditionalCup\n");
-    // todo test when highest level box becomes empty
+
+    SUBCASE("Highest level box becomes empty")
+    {
+        std::list<Box> l = Box::readFromFile("boxesListTest.txt");
+        std::ostringstream s;
+        for (Box &b : l)
+        {
+            b.optimize();
+            s << b;
+        }
+        CHECK_EQ(s.str(), "B:\n\tS1\n\tS2\n");
+    }
 }
 
 #endif
