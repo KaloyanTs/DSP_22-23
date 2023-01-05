@@ -1,7 +1,7 @@
 #ifndef __GRAPH_HPP
 #define __GRAPH_HPP
 #include <ostream>
-#include <map>
+#include <unordered_map>
 #include <string>
 #include <utility>
 #include <list>
@@ -12,7 +12,7 @@ using ChildrenList = std::list<WeightedPathTo>;
 
 class Graph
 {
-    std::map<Vertex, ChildrenList> assArr;
+    std::unordered_map<Vertex, ChildrenList> assArr;
 
 public:
     static unsigned uniquesCount(const std::list<Vertex> &);

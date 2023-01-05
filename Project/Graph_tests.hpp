@@ -22,7 +22,7 @@ TEST_CASE("Printing Graph data")
 
     std::ostringstream s;
     s << g;
-    CHECK_EQ(s.str(), "A\t->\tB(18)\tC(2)\tD(5)\nB\t->\tA(18)\tD(14)\tE(12)\nC\t->\tA(2)\tF(20)\nD\t->\tA(5)\tB(14)\tE(7)\tF(26)\nE\t->\tB(12)\tD(7)\nF\t->\tC(20)\tD(26)\n");
+    CHECK_EQ(s.str(), "B\t->\tA(18)\tD(14)\tE(12)\nF\t->\tC(20)\tD(26)\nC\t->\tA(2)\tF(20)\nD\t->\tA(5)\tB(14)\tE(7)\tF(26)\nA\t->\tB(18)\tC(2)\tD(5)\nE\t->\tB(12)\tD(7)\n");
 }
 
 TEST_CASE("Walk through cities")
