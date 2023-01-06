@@ -2,7 +2,7 @@
 #define __TRAIN_MAP_TESTS_HPP
 
 #include "doctest.h"
-#include "TrainMap.hpp"
+#include "../TrainMap.hpp"
 #include <sstream>
 #include <iostream>
 #include <list>

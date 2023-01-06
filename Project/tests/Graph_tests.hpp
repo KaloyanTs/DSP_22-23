@@ -2,7 +2,7 @@
 #define __GRAPH_TESTS_HPP
 
 #include "doctest.h"
-#include "Graph.hpp"
+#include "../Graph.hpp"
 #include <sstream>
 #include <iostream>
 

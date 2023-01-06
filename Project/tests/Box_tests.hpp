@@ -2,7 +2,7 @@
 #define __BOX_TESTS_HPP
 
 #include "doctest.h"
-#include "Box.hpp"
+#include "../Box.hpp"
 #include <iostream>
 #include <sstream>
 

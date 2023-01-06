@@ -2,7 +2,7 @@
 #define __SKIPLIST_TESTS_HPP
 
 #include "doctest.h"
-#include "SkipList.hpp"
+#include "../SkipList.hpp"
 #include <sstream>
 #include <string>
 #include <queue>

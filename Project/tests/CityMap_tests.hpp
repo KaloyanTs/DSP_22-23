@@ -2,7 +2,7 @@
 #define __CITY_MAP_TESTS_HPP
 
 #include "doctest.h"
-#include "CityMap.hpp"
+#include "../CityMap.hpp"
 #include <sstream>
 #include <iostream>
 
