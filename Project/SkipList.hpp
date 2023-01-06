@@ -2,8 +2,8 @@
 #define _SKIP_LIST_HPP
 #include <iostream>
 #include <queue>
-#include <deque>
 #include <list>
+#include <unordered_map>
 
 template <typename T>
 class SkipList

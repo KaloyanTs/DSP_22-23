@@ -122,11 +122,61 @@ SkipList<T> &SkipList<T>::addLink(const T &from, const T &to)
     return *this;
 }
 
+// template <typename T>
+// std::list<T> SkipList<T>::BFSpath(const T &from, const T &to)
+// {
+//     this->reset();
+//     std::queue<std::vector<Node *>> q;
+
+//     Node *f = find(from);
+//     if (!f)
+//         throw std::runtime_error("Starting element not found in the list!");
+//     Node *t = find(to);
+//     if (!t)
+//         throw std::runtime_error("Ending element not found in the list!");
+
+//     std::vector<Node *> current;
+//     current.push_back(f);
+//     q.push(current);
+//     while (!q.empty())
+//     {
+//         current = std::move(q.front());
+
+//         q.pop();
+//         if (current.back() == t)
+//         {
+//             std::list<T> res;
+//             for (const Node *ptr : current)
+//                 res.push_back(ptr->data);
+//             return res;
+//         }
+
+//         if (!current.back()->visited)
+//         {
+//             current.back()->visited = true;
+//             if (current.back()->skip)
+//             {
+//                 current.push_back(current.back()->skip);
+//                 q.push(current);
+//                 current.pop_back();
+//             }
+//             if (current.back()->next)
+//             {
+//                 current.push_back(current.back()->next);
+//                 q.push(current);
+//             }
+//         }
+//     }
+
+//     return std::list<T>();
+// }
+
 template <typename T>
 std::list<T> SkipList<T>::BFSpath(const T &from, const T &to)
 {
     this->reset();
-    std::queue<std::deque<Node *>> q;
+    std::queue<std::pair<Node *, Node *>> q;
+    std::unordered_map<Node *, Node *> pathSaver;
 
     Node *f = find(from);
     if (!f)
@@ -135,39 +185,38 @@ std::list<T> SkipList<T>::BFSpath(const T &from, const T &to)
     if (!t)
         throw std::runtime_error("Ending element not found in the list!");
 
-    std::deque<Node *> current;
-    current.push_back(f);
-    q.push(current);
+    std::pair<Node *, Node *> current;
+    q.push(std::pair<Node *, Node *>(f, nullptr));
     while (!q.empty())
     {
         current = std::move(q.front());
 
         q.pop();
-        if (current.back() == t)
+
+        pathSaver[current.first] = current.second;
+        if (current.first == t)
         {
             std::list<T> res;
-            for (const Node *ptr : current)
-                res.push_back(ptr->data);
+            Node *buf = current.second;
+            res.push_front(current.first->data);
+            while (buf)
+            {
+                res.push_front(buf->data);
+                buf = pathSaver[buf];
+            }
             return res;
         }
 
-        if (!current.back()->visited)
+        if (!current.first->visited)
         {
-            current.back()->visited = true;
-            if (current.back()->skip)
-            {
-                current.push_back(current.back()->skip);
-                q.push(current);
-                current.pop_back();
-            }
-            if (current.back()->next)
-            {
-                current.push_back(current.back()->next);
-                q.push(current);
-            }
+            current.first->visited = true;
+            if (current.first->skip)
+                q.push(std::pair<Node *, Node *>(current.first->skip, current.first));
+            if (current.first->next)
+                q.push(std::pair<Node *, Node *>(current.first->next, current.first));
         }
     }
-    
+
     return std::list<T>();
 }
 
