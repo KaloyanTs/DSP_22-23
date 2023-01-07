@@ -122,55 +122,6 @@ SkipList<T> &SkipList<T>::addLink(const T &from, const T &to)
     return *this;
 }
 
-// template <typename T>
-// std::list<T> SkipList<T>::BFSpath(const T &from, const T &to)
-// {
-//     this->reset();
-//     std::queue<std::vector<Node *>> q;
-
-//     Node *f = find(from);
-//     if (!f)
-//         throw std::runtime_error("Starting element not found in the list!");
-//     Node *t = find(to);
-//     if (!t)
-//         throw std::runtime_error("Ending element not found in the list!");
-
-//     std::vector<Node *> current;
-//     current.push_back(f);
-//     q.push(current);
-//     while (!q.empty())
-//     {
-//         current = std::move(q.front());
-
-//         q.pop();
-//         if (current.back() == t)
-//         {
-//             std::list<T> res;
-//             for (const Node *ptr : current)
-//                 res.push_back(ptr->data);
-//             return res;
-//         }
-
-//         if (!current.back()->visited)
-//         {
-//             current.back()->visited = true;
-//             if (current.back()->skip)
-//             {
-//                 current.push_back(current.back()->skip);
-//                 q.push(current);
-//                 current.pop_back();
-//             }
-//             if (current.back()->next)
-//             {
-//                 current.push_back(current.back()->next);
-//                 q.push(current);
-//             }
-//         }
-//     }
-
-//     return std::list<T>();
-// }
-
 template <typename T>
 std::list<T> SkipList<T>::BFSpath(const T &from, const T &to)
 {
