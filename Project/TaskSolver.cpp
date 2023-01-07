@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+const std::string TaskSolver::BOX_PATH = "boxesList.txt";
+
 void TaskSolver::total()
 {
     std::string pathToMap, pathToConstrains;
@@ -68,7 +70,7 @@ void TaskSolver::b()
 
 void TaskSolver::c()
 {
-    std::list<Box> l = Box::solve("boxesList.txt");
+    std::list<Box> l = Box::solve(BOX_PATH);
     std::cout << "The optimal boxes configuration is:\n";
     for (const Box &b : l)
         std::cout << b;

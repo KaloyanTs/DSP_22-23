@@ -8,8 +8,10 @@
 class TaskSolver
 {
     void optimize(std::list<Box> &boxes);
+    TaskSolver() {}
 
 public:
+    static const std::string BOX_PATH;
     static void a();
     static void b();
     static void c();
