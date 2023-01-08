@@ -17,6 +17,13 @@ void BDZInterface::showOptimalWalk(std::string &city, std::list<std::string> &w)
         std::cout << '\t' << landmark << '\n';
 }
 
+void BDZInterface::showBoxConfiguration(std::list<Box> &boxes)
+{
+    std::cout << "The optimal boxes configuration is:\n";
+    for (const Box &b : boxes)
+        std::cout << b;
+}
+
 void BDZInterface::showHelp() { std::cout << HELP_MSG; }
 
 void BDZInterface::run()
@@ -60,10 +67,6 @@ void BDZInterface::run()
             std::cin.ignore();
         }
         else if (cmd == 3)
-        {
-            std::cout << "The optimal boxes configuration is:\n";
-            for (const Box &b : boxes)
-                std::cout << b;
-        }
+            showBoxConfiguration(boxes);
     } while (cmd);
 }

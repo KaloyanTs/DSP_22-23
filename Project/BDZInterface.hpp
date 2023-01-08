@@ -11,8 +11,9 @@ class BDZInterface
     static const std::string BOX_PATH;
 
 private:
-    static void showShortestJourney(std::list<std::string> &j);
-    static void showOptimalWalk(std::string &city, std::list<std::string> &w);
+    static void showShortestJourney(std::list<std::string> &);
+    static void showOptimalWalk(std::string &city, std::list<std::string> &);
+    static void showBoxConfiguration(std::list<Box> &);
     static void showHelp();
 
 public:
