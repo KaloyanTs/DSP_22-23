@@ -11,7 +11,6 @@ words TrainMap::solveShortestJourney(const std::string &mapPath, const std::stri
     ifs >> count;
     ifs.ignore();
     TrainMap tm;
-    std::string cities[] = {"Sofia", "Pazardzhik", "Plovdiv", "Dimitrovgrad", "StaraZagora", "NovaZagora", "Yambol", "Karnobat", "Burgas"};
     std::string buf1, buf2;
     for (unsigned i = 0; i < count; ++i)
     {
