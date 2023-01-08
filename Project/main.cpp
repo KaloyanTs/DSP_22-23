@@ -6,13 +6,10 @@
 // #include "tests/CityMap_tests.hpp"
 // #include "tests/Box_tests.hpp"
 
-#include "TaskSolver.hpp"
+#include "BDZInterface.hpp"
 
 int main()
 {
-    TaskSolver::total();
-    std::cout << "Enter any key to exit...";
-    std::cin.ignore();
-    std::cin.get();
+    BDZInterface::run();
     return 0;
 }
