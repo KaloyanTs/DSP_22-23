@@ -21,12 +21,12 @@ struct BinaryTree
 {
     BinaryTreeEl<T> *mRoot;
     void copy(const BinaryTree<T> &other);
-    void clearEl(const BinaryTreeEl<T> *&t);
+    void clearEl(BinaryTreeEl<T> *&t);
     size_t depthEl(const BinaryTreeEl<T> *r) const;
+    void printEl(const BinaryTreeEl<T> *from, std::ostream &os = std::cout) const;
 
 public:
     BinaryTree() : mRoot(nullptr) {}
-    BinaryTree(const T &d) : mRoot(new BinaryTreeEl(d)) {}
     BinaryTree(const BinaryTree &);
     BinaryTree(T const &mRoot, BinaryTree &&left = BinaryTree(), BinaryTree &&right = BinaryTree());
     BinaryTree &operator=(const BinaryTree &);
@@ -35,7 +35,7 @@ public:
     void clear();
     void swap(BinaryTree &other);
     void print(std::ostream &os = std::cout) const;
-    size_t depth() { return depthEl(root); }
+    size_t depth() { return depthEl(mRoot); }
     ~BinaryTree();
 };
 
@@ -44,26 +44,32 @@ size_t BinaryTree<T>::depthEl(const BinaryTreeEl<T> *r) const
 {
     if (!r)
         return 0;
-    return 1 + std::max(depthEl(root->left), depthEl(root->right));
+    return 1 + std::max(depthEl(r->left), depthEl(r->right));
 }
 
 template <typename T>
-void BinaryTree<T>::print(std::ostream &os = std::cout) const
+void BinaryTree<T>::printEl(const BinaryTreeEl<T> *from, std::ostream &os) const
 {
-    if (!root)
+    if (!from)
     {
         os << "()";
         return;
     }
-    os << '(' << root->data;
-    if (left || right)
+    os << '(' << from->data;
+    if (from->left || from->right)
     {
         os << ' ';
-        print(root->left);
+        printEl(from->left, os);
         os << ' ';
-        print(root->right);
+        printEl(from->right, os);
     }
     os << ')';
+}
+
+template <typename T>
+void BinaryTree<T>::print(std::ostream &os) const
+{
+    printEl(mRoot, os);
 }
 
 template <typename T>
@@ -78,7 +84,7 @@ void BinaryTree<T>::copy(const BinaryTree<T> &other)
 }
 
 template <typename T>
-void BinaryTree<T>::clearEl(const BinaryTreeEl<T> *&t)
+void BinaryTree<T>::clearEl(BinaryTreeEl<T> *&t)
 {
     if (!t)
         return;
@@ -109,15 +115,15 @@ void BinaryTree<T>::clear()
 }
 
 template <typename T>
-BinaryTree<T>::BinaryTree(T const &mRoot, BinaryTree &&left = BinaryTree(), BinaryTree &&right = BinaryTree())
+BinaryTree<T>::BinaryTree(T const &r, BinaryTree &&left, BinaryTree &&right)
 {
-    mRoot = new BinaryTreeEl<T>(mRoot, left.mRoot, right.mRoot);
+    mRoot = new BinaryTreeEl<T>(r, left.mRoot, right.mRoot);
     left.mRoot = right.mRoot = nullptr;
 }
 
 template <typename T>
 BinaryTree<T>::BinaryTree(const BinaryTree<T> &other)
-    : head(nullptr), tail(nullptr)
+    : mRoot(nullptr)
 {
     copy(other);
 }

@@ -21,37 +21,38 @@ struct BinarySearchTree
 {
     BinarySearchTreeEl<T> *mRoot;
     void copy(const BinarySearchTree<T> &other);
-    void clearEl(const BinarySearchTreeEl<T> *&t);
+    void clearEl(BinarySearchTreeEl<T> *&t);
     size_t depthEl(const BinarySearchTreeEl<T> *r) const;
-    BinarySearchTreeEl<T> *find(const BinarySearchTreeEl<T> *from, const T &el) const;
+    BinarySearchTreeEl<T> *find(BinarySearchTreeEl<T> *from, const T &el);
     void insertEl(BinarySearchTreeEl<T> *&from, const T &el);
     void leftToRightEl(const BinarySearchTreeEl<T> *from, std::ostream &os) const;
+    void printEl(const BinarySearchTreeEl<T> *from, std::ostream &os = std::cout) const;
 
 public:
     BinarySearchTree() : mRoot(nullptr) {}
-    BinarySearchTree(const T &d) : mRoot(new BinarySearchTreeEl(d)) {}
+    BinarySearchTree(const T &d) : mRoot(new BinarySearchTreeEl<T>(d)) {}
     BinarySearchTree(const BinarySearchTree &);
     BinarySearchTree &operator=(const BinarySearchTree &);
     T root() const;
-    bool empty() const { return !root; }
+    bool empty() const { return !mRoot; }
     void clear();
-    void swap(BinarySearchTree &other);
+    void swap(BinarySearchTree &);
     void print(std::ostream &os = std::cout) const;
-    BinarySearchTree &insert(const T &d) { insertEl(root, d); }
-    bool search(const T &d) { return find(root, d); }
-    void leftToRight(std::ostream &os = std::cout) { leftToRightEl(root, os); }
-    const size_t depth() { return depthEl(root); }
+    BinarySearchTree &insert(const T &d);
+    bool search(const T &d) { return find(mRoot, d); }
+    void leftToRight(std::ostream &os = std::cout) { leftToRightEl(mRoot, os); }
+    const size_t depth() { return depthEl(mRoot); }
     ~BinarySearchTree();
 };
 
 template <typename T>
-BinarySearchTreeEl<T> *BinarySearchTree<T>::find(const BinarySearchTreeEl<T> *from, const T &el) const
+BinarySearchTreeEl<T> *BinarySearchTree<T>::find(BinarySearchTreeEl<T> *from, const T &el)
 {
     if (!from)
         return nullptr;
     if (from->data == el)
         return from;
-    BinarySearchTreeEl *l = find(from->left, el);
+    BinarySearchTreeEl<T> *l = find(from->left, el);
     if (l)
         return l;
     return find(from->right, el);
@@ -66,9 +67,16 @@ void BinarySearchTree<T>::insertEl(BinarySearchTreeEl<T> *&from, const T &el)
         return;
     }
     if (el <= from->data)
-        insert(from->left, el);
+        insertEl(from->left, el);
     else
-        insert(from->right, el);
+        insertEl(from->right, el);
+}
+
+template <typename T>
+BinarySearchTree<T> &BinarySearchTree<T>::insert(const T &d)
+{
+    insertEl(mRoot, d);
+    return *this;
 }
 
 template <typename T>
@@ -76,14 +84,14 @@ void BinarySearchTree<T>::leftToRightEl(const BinarySearchTreeEl<T> *from, std::
 {
     if (from->left)
     {
-        leftToRightEl(from->left);
+        leftToRightEl(from->left, os);
         os << ' ';
     }
     os << from->data;
     if (from->right)
     {
         os << ' ';
-        leftToRight(from->right);
+        leftToRightEl(from->right, os);
     }
 }
 
@@ -92,26 +100,32 @@ size_t BinarySearchTree<T>::depthEl(const BinarySearchTreeEl<T> *r) const
 {
     if (!r)
         return 0;
-    return 1 + std::max(depthEl(root->left), depthEl(root->right));
+    return 1 + std::max(depthEl(mRoot->left), depthEl(mRoot->right));
 }
 
 template <typename T>
-void BinarySearchTree<T>::print(std::ostream &os = std::cout) const
+void BinarySearchTree<T>::printEl(const BinarySearchTreeEl<T> *from, std::ostream &os) const
 {
-    if (!root)
+    if (!from)
     {
         os << "()";
         return;
     }
-    os << '(' << root->data;
-    if (left || right)
+    os << '(' << from->data;
+    if (from->left || from->right)
     {
         os << ' ';
-        print(root->left);
+        printEl(from->left, os);
         os << ' ';
-        print(root->right);
+        printEl(from->right, os);
     }
     os << ')';
+}
+
+template <typename T>
+void BinarySearchTree<T>::print(std::ostream &os) const
+{
+    printEl(mRoot, os);
 }
 
 template <typename T>
@@ -126,7 +140,7 @@ void BinarySearchTree<T>::copy(const BinarySearchTree<T> &other)
 }
 
 template <typename T>
-void BinarySearchTree<T>::clearEl(const BinarySearchTreeEl<T> *&t)
+void BinarySearchTree<T>::clearEl(BinarySearchTreeEl<T> *&t)
 {
     if (!t)
         return;
@@ -158,7 +172,7 @@ void BinarySearchTree<T>::clear()
 
 template <typename T>
 BinarySearchTree<T>::BinarySearchTree(const BinarySearchTree<T> &other)
-    : head(nullptr), tail(nullptr)
+    : mRoot(nullptr)
 {
     copy(other);
 }

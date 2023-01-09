@@ -8,17 +8,17 @@
 
 #define AllTrees BinaryTree<int>, BinarySearchTree<int>
 
-TEST_CASE_TEMPLATE("Извеждане на примерно дърво на две нива", Tree, AllTrees)
+TEST_CASE("Извеждане на примерно дърво на две нива")
 {
-    Tree t(1, Tree(2, Tree(3), Tree(4)), Tree(5, Tree(), Tree(6, Tree(7))));
+    BinaryTree<int> t(1, BinaryTree<int>(2, BinaryTree<int>(3), BinaryTree<int>(4)), BinaryTree<int>(5, BinaryTree<int>(), BinaryTree<int>(6, BinaryTree<int>(7))));
     std::ostringstream os;
     t.print(os);
     CHECK_EQ(os.str(), "(1 (2 (3) (4)) (5 () (6 (7) ())))");
 }
 
-TEST_CASE_TEMPLATE("Работа с примерно дърво на четири нива", Tree, AllTrees)
+TEST_CASE("Работа с примерно дърво на четири нива")
 {
-    Tree t = Tree(1, Tree(2, Tree(3), Tree(4, Tree(5), Tree(6))), Tree(7, Tree(8), Tree(9, Tree(10))));
+    BinaryTree<int> t = BinaryTree<int>(1, BinaryTree<int>(2, BinaryTree<int>(3), BinaryTree<int>(4, BinaryTree<int>(5), BinaryTree<int>(6))), BinaryTree<int>(7, BinaryTree<int>(8), BinaryTree<int>(9, BinaryTree<int>(10))));
 
     SUBCASE("Извеждане")
     {
@@ -42,7 +42,7 @@ TEST_CASE("Наредено двоично дърво")
     {
         std::ostringstream os;
         t.print(os);
-        CHECK_EQ(os.str(), "(5 (3 (3) (4 () (5))) (7 (6) (9 (8))))");
+        CHECK_EQ(os.str(), "(5 (3 (3) (4 () (5))) (7 (6) (9 (8) ())))");
     }
 
     SUBCASE("Търсене на елемент")

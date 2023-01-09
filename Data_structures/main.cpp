@@ -6,3 +6,4 @@
 #include "stack_tests.hpp"
 #include "queue_tests.hpp"
 #include "lists_tests.hpp"
+#include "trees_tests.hpp"
