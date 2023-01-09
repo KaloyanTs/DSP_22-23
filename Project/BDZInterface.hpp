@@ -4,6 +4,7 @@
 #include "TrainMap.hpp"
 #include "CityMap.hpp"
 #include "Box.hpp"
+#include <conio.h>
 
 class BDZInterface
 {

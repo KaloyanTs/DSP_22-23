@@ -48,15 +48,15 @@ void BDZInterface::run()
     }
     std::list<Box> boxes = Box::solve(BOX_PATH);
     showHelp();
-    unsigned cmd;
+    char cmd;
     do
     {
-        std::cin >> cmd;
-        if (cmd == 4)
+        cmd = getch();
+        if (cmd == '4')
             showHelp();
-        else if (cmd == 1)
+        else if (cmd == '1')
             showShortestJourney(res);
-        else if (cmd == 2)
+        else if (cmd == '2')
         {
             std::string city;
             std::cout << "Enter name of city: ";
@@ -66,7 +66,7 @@ void BDZInterface::run()
             showOptimalWalk(city, tmp);
             std::cin.ignore();
         }
-        else if (cmd == 3)
+        else if (cmd == '3')
             showBoxConfiguration(boxes);
-    } while (cmd);
+    } while (cmd != '0');
 }
