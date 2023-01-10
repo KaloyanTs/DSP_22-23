@@ -1,6 +1,0 @@
-4 4
-Railstation Center 13
-Center Dzhamia 4
-Dzhamia Marketplace 1
-Dzhamia Railstation 9
-26
