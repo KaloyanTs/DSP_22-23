@@ -14,7 +14,7 @@ struct ListEl
 };
 
 template <typename T>
-struct List
+class List
 {
 public:
     class Iterator

@@ -17,7 +17,7 @@ struct BinaryTreeEl
 };
 
 template <typename T>
-struct BinaryTree
+class BinaryTree
 {
     BinaryTreeEl<T> *mRoot;
     void copy(const BinaryTree<T> &other);

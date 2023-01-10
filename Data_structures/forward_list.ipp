@@ -13,7 +13,7 @@ struct ForwardListEl
 };
 
 template <typename T>
-struct ForwardList
+class ForwardList
 {
 public:
     class Iterator
