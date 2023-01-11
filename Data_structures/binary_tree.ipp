@@ -99,13 +99,7 @@ void BinaryTree<T>::clearEl(BinaryTreeEl<T> *&t)
 template <typename T>
 BinaryTreeEl<T> *BinaryTreeEl<T>::clone() const
 {
-    BinaryTreeEl *lCopy = nullptr;
-    if (left)
-        lCopy = left->clone();
-    BinaryTreeEl *rCopy = nullptr;
-    if (right)
-        rCopy = right->clone();
-    return new BinaryTreeEl(data, lCopy, rCopy);
+    return new BinaryTreeEl(data, (left ? left->clone() : nullptr), (right ? right->clone() : nullptr));
 }
 
 template <typename T>

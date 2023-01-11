@@ -16,9 +16,9 @@ template <typename T>
 struct LinkedQueue
 {
     LinkedQueueEl<T> *head, *tail;
-    size_t size;
-    LinkedQueue() : head(nullptr), tail(nullptr), size(0) {}
-    LinkedQueue(const T &d) : head(new LinkedQueueEl<T>(d)), tail(head), size(1) {}
+    size_t mSize;
+    LinkedQueue() : head(nullptr), tail(nullptr), mSize(0) {}
+    LinkedQueue(const T &d) : head(new LinkedQueueEl<T>(d)), tail(head), mSize(1) {}
     LinkedQueue(const LinkedQueue &) = delete;
     LinkedQueue &operator=(const LinkedQueue &) = delete;
     void print() const;
@@ -26,7 +26,7 @@ struct LinkedQueue
     void pop();
     T front() const;
     bool empty() const { return !head; }
-    size_t getSize() const { return size; }
+    size_t getSize() const { return mSize; }
     ~LinkedQueue();
 };
 
@@ -62,13 +62,13 @@ void LinkedQueue<T>::push(const T &data)
     if (!head)
     {
         head = tail = new LinkedQueueEl<T>(data);
-        ++size;
+        ++mSize;
         return;
     }
     LinkedQueueEl<T> *newEl = new LinkedQueueEl<T>(data);
     tail->next = newEl;
     tail = tail->next;
-    ++size;
+    ++mSize;
 }
 
 template <typename T>
@@ -81,7 +81,7 @@ void LinkedQueue<T>::pop()
         tail = nullptr;
     head = head->next;
     delete prev;
-    --size;
+    --mSize;
 }
 
 template <typename T>

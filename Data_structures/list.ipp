@@ -267,7 +267,7 @@ void List<T>::eraseAfter(Iterator &pos)
     {
         delete tail;
         tail = pos->ptr;
-        --size;
+        --mSize;
         return;
     }
     Iterator tmp = pos++;
@@ -275,7 +275,7 @@ void List<T>::eraseAfter(Iterator &pos)
     tmp.ptr->next->prev = tmp.ptr;
     delete pos.ptr;
     pos = ++tmp;
-    --size;
+    --mSize;
 }
 
 template <typename T>
