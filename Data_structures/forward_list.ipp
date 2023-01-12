@@ -27,7 +27,7 @@ public:
         Iterator operator++(int);
         bool operator==(const Iterator &other) { return ptr == other.ptr; }
         bool operator!=(const Iterator &other) { return ptr != other.ptr; }
-        operator bool() { return ptr; }
+        operator bool() const { return ptr; }
         friend class ForwardList<T>;
     };
 
@@ -174,6 +174,8 @@ typename ForwardList<T>::Iterator ForwardList<T>::Iterator::operator++(int)
 template <typename T>
 void ForwardList<T>::insertAfter(const Iterator &pos, const T &el)
 {
+    if (!pos)
+        return;
     pos.ptr->next = new ForwardListEl<T>(el, pos.ptr->next);
     ++mSize;
 }
@@ -181,15 +183,8 @@ void ForwardList<T>::insertAfter(const Iterator &pos, const T &el)
 template <typename T>
 void ForwardList<T>::eraseAfter(Iterator &pos)
 {
-    if (!pos)
+    if (!pos || pos->ptr == mBack)
         return;
-    if (pos->ptr == mBack)
-    {
-        delete mBack;
-        mBack = pos->ptr;
-        --mSize;
-        return;
-    }
     Iterator tmp = pos++;
     tmp.ptr->next = pos.ptr->next;
     delete pos.ptr;
