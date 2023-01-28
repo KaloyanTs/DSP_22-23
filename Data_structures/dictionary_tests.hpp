@@ -4,9 +4,9 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-#include <fstream>
 #include "doctest.h"
 #include "hash_table.hpp"
+#include "avl_dictionary.ipp"
 
 unsigned hashString(const std::string &key)
 {
@@ -16,19 +16,21 @@ unsigned hashString(const std::string &key)
     return sum;
 }
 
-TEST_CASE("Добавяне на елемент в празен речник")
+#define ALL_DICTIONARIES AVLDictionary<std::string, int> //, HashTable<std::string, int, hashString>
+
+TEST_CASE_TEMPLATE("Добавяне на елемент в празен речник", Dictionary, ALL_DICTIONARIES)
 {
-    HashTable<std::string, int, hashString> dict;
+    Dictionary dict;
     CHECK_EQ(dict.find("the_answer"), nullptr);
     dict.set("the_answer", 42);
     CHECK_EQ(*dict.find("the_answer"), 42);
     dict.set("the_answer", 43);
 }
 
-TEST_CASE("Добавяне и изтриване на елементи")
+TEST_CASE_TEMPLATE("Добавяне и изтриване на елементи", Dictionary, ALL_DICTIONARIES)
 {
 
-    HashTable<std::string, int, hashString> dict;
+    Dictionary dict;
     for (int x : {12, 42, 135, 15, 7})
         dict.set(std::to_string(x), x);
 
@@ -45,11 +47,8 @@ TEST_CASE("Добавяне и изтриване на елементи")
 
     SUBCASE("Изтриваме успешно съществуващи елементи")
     {
-        //        dict.info();
         REQUIRE(dict.erase("135"));
-        //        dict.info();
         REQUIRE(dict.erase("15"));
-        //        dict.info();
 
         CHECK_EQ(dict.find("135"), nullptr);
         CHECK_EQ(dict.find("15"), nullptr);
@@ -81,9 +80,9 @@ TEST_CASE("Добавяне и изтриване на елементи")
     }
 }
 
-TEST_CASE("Добавяне и изтриване на 100 елемента")
+TEST_CASE_TEMPLATE("Добавяне и изтриване на 100 елемента", Dictionary, ALL_DICTIONARIES)
 {
-    HashTable<std::string, int, hashString> dict;
+    Dictionary dict;
     for (int i = 1; i <= 50; i++)
     {
         dict.set(std::to_string(i), i);

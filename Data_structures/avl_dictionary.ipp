@@ -19,10 +19,20 @@ class AVLDictionary
         bool operator>(const KeyValue &other) { return key > other.key; }
         bool operator<=(const KeyValue &other) { return !(*this > other); }
         bool operator>=(const KeyValue &other) { return !(*this < other); }
+        static K getKey(const KeyValue &kv)
+        {
+            return kv.key;
+        }
+        static V getValue(const KeyValue &kv)
+        {
+            return kv.value;
+        }
     };
 
     AVLTree<KeyValue> data;
-    friend std::ostream &operator<<(std::ostream &, const KeyValue &);
+
+    template <typename A, typename B>
+    friend std::ostream &operator<<(std::ostream &, const typename AVLDictionary<A, B>::KeyValue &);
 
 public:
     AVLDictionary() {}
@@ -31,7 +41,7 @@ public:
         KeyValue *const p = data.search(KeyValue(key));
         if (!p)
             return nullptr;
-        return &p->second;
+        return &p->value;
     }
     void set(const K &key, const V &value)
     {
@@ -59,24 +69,9 @@ public:
             data.insert(KeyValue(key));
         return res->value;
     }
-    std::vector<K> keys() const
-    {
-        std::vector<K> res;
-        K getKey(const KeyValue &kv)
-        {
-            return kv.key;
-        }
-        return data.collect<K (*)(const KeyValue &), K>(getKey);
-    }
-    std::vector<V> values() const
-    {
-        std::vector<V> res;
-        K getValue(const KeyValue &kv)
-        {
-            return kv.value;
-        }
-        return data.collect<V (*)(const KeyValue &), V>(getValue);
-    }
+    std::vector<K> keys() const { return data.collect(KeyValue::getKey); }
+    std::vector<V> values() const { return data.collect(KeyValue::getValue); }
+    // todo printing pairs maybe not working
 };
 
 template <typename K, typename V>

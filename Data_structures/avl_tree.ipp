@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <stdexcept>
 #include <cassert>
+#include <vector>
 
 template <typename T>
 struct AVLNode
@@ -25,8 +26,8 @@ class AVLTree
     void copy(const AVLTree<T> &other);
     void clearEl(AVLNode<T> *&t);
     bool eraseEl(AVLNode<T> *&t, const T &data);
-    size_t depthEl(const AVLNode<T> *r) const;
     AVLNode<T> *find(AVLNode<T> *from, const T &el);
+    AVLNode<T> *find(AVLNode<T> *from, const T &el) const;
     void insertEl(AVLNode<T> *&from, const T &el);
     void leftToRightEl(const AVLNode<T> *from, std::ostream &os) const;
     void printEl(const AVLNode<T> *from, std::ostream &os = std::cout) const;
@@ -39,6 +40,15 @@ class AVLTree
     void balanceLeft(AVLNode<T> *&root);
     size_t height(const AVLNode<T> *node) const;
     size_t balanceFactor(const AVLNode<T> *node) const;
+    template <typename FunctionResult>
+    void collectEl(AVLNode<T> *from, std::vector<FunctionResult> &res, FunctionResult (*f)(const T &)) const
+    {
+        if (!from)
+            return;
+        collectEl(from->left, res, f);
+        res.push_back(f(from->data));
+        collectEl(from->right, res, f);
+    }
 
 public:
     AVLTree() : mRoot(nullptr) {}
@@ -53,9 +63,19 @@ public:
     void swap(AVLTree &);
     void print(std::ostream &os = std::cout) const;
     AVLTree &insert(const T &d);
-    bool search(const T &d) { return find(mRoot, d); }
+    T *const search(const T &d) const
+    {
+        AVLNode<T> *const res = find(mRoot, d);
+        return (res ? &res->data : nullptr);
+    }
     void leftToRight(std::ostream &os = std::cout) { leftToRightEl(mRoot, os); }
-    const size_t depth() { return depthEl(mRoot); }
+    template <typename FunctionResult>
+    std::vector<FunctionResult> collect(FunctionResult (*f)(const T &)) const
+    {
+        std::vector<FunctionResult> res;
+        collectEl(mRoot, res, f);
+        return res;
+    }
     ~AVLTree();
 };
 
@@ -121,7 +141,7 @@ void AVLTree<T>::balanceLeft(AVLNode<T> *&root)
         if (rightSubTreeBalance == 1)
         {
             rotateLeft(root->left);
-            updateHeight(root->left->right);
+            updateHeight(root->left->left);
             updateHeight(root->left);
         }
         rotateRight(root);
@@ -156,6 +176,18 @@ AVLNode<T> *AVLTree<T>::findMinNode(AVLNode<T> *r)
 
 template <typename T>
 AVLNode<T> *AVLTree<T>::find(AVLNode<T> *from, const T &el)
+{
+    if (!from)
+        return nullptr;
+    if (from->data == el)
+        return from;
+    if (from->data > el)
+        return find(from->left, el);
+    return find(from->right, el);
+}
+
+template <typename T>
+AVLNode<T> *AVLTree<T>::find(AVLNode<T> *from, const T &el) const
 {
     if (!from)
         return nullptr;
@@ -214,14 +246,6 @@ void AVLTree<T>::leftToRightEl(const AVLNode<T> *from, std::ostream &os) const
 }
 
 template <typename T>
-size_t AVLTree<T>::depthEl(const AVLNode<T> *r) const
-{
-    if (!r)
-        return 0;
-    return 1 + std::max(depthEl(mRoot->left), depthEl(mRoot->right));
-}
-
-template <typename T>
 void AVLTree<T>::printEl(const AVLNode<T> *from, std::ostream &os) const
 {
     if (!from)
@@ -265,13 +289,15 @@ bool AVLTree<T>::eraseEl(AVLNode<T> *&t, const T &el)
 
     if (t->data < el)
     {
-        eraseEl(t->right, el);
+        if (!eraseEl(t->right, el))
+            return false;
         updateHeight(t);
         balanceRight(t);
     }
     else if (t->data > el)
     {
-        eraseEl(t->left, el);
+        if (!eraseEl(t->left, el))
+            return false;
         updateHeight(t);
         balanceLeft(t);
     }
