@@ -2,11 +2,14 @@
 #define __TREES_TESTS_HPP
 
 #include <sstream>
+#include <cmath>
 #include "doctest.h"
 #include "binary_tree.ipp"
 #include "binary_search_tree.ipp"
+#include "avl_tree.hpp"
 
 #define AllTrees BinaryTree<int>, BinarySearchTree<int>
+#define OrderedTrees AVLTree<int>, BinarySearchTree<int>
 
 TEST_CASE("Извеждане на примерно дърво на две нива")
 {
@@ -33,9 +36,9 @@ TEST_CASE("Работа с примерно дърво на четири нив�
     }
 }
 
-TEST_CASE("Наредено двоично дърво")
+TEST_CASE_TEMPLATE("Наредено двоично дърво", Tree, OrderedTrees)
 {
-    BinarySearchTree<int> t(5);
+    Tree t(5);
     t.insert(3).insert(7).insert(4).insert(3).insert(9).insert(6).insert(8).insert(5);
 
     SUBCASE("Принтиране")
@@ -58,6 +61,33 @@ TEST_CASE("Наредено двоично дърво")
         std::ostringstream os;
         t.leftToRight(os);
         CHECK_EQ(os.str(), "3 3 4 5 5 6 7 8 9");
+    }
+}
+
+TEST_CASE("AVL дървото се самобалансира")
+{
+    AVLTree<int> t;
+    CHECK_EQ(t.height(), 0);
+    const size_t count = 100;
+
+    for (unsigned i = 0; i < count; ++i)
+    {
+        t.insert(i);
+        CHECK_EQ(t.height(), (int)log2(i + 1) + 1);
+    }
+
+    SUBCASE("при добавяне");
+    {
+        CHECK_EQ(t.height(), (int)log2(count) + 1);
+    }
+
+    SUBCASE("при премахване")
+    {
+        for (unsigned i = count; i > 0; --i)
+        {
+            CHECK_LE(t.height(), (int)log2(150 - i) + 3);
+            REQUIRE(t.erase((i + (count >> 1)) % count));
+        }
     }
 }
 
