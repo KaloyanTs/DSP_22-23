@@ -22,6 +22,12 @@ class HashTable
         return &data[index];
     }
 
+    const Bucket *findBucket(const K &key)const
+    {
+        unsigned index = hash(key) % size;
+        return &data[index];
+    }
+
     Pair *findPair(Bucket *b, const K &key)
     {
         if (!b)
@@ -32,11 +38,22 @@ class HashTable
         return nullptr;
     }
 
+    const Pair *findPair(const Bucket *b, const K &key)const
+    {
+        if (!b)
+            return nullptr;
+        for (const Pair &p : *b)
+            if (p.first == key)
+                return &p;
+        return nullptr;
+    }
+
+
 public:
     HashTable() {}
-    V *const find(const K &key) const
+    const V *const find(const K &key) const
     {
-        Pair *p = findPair(findBucket(key), key);
+        const Pair *p = findPair(findBucket(key), key);
         if (!p)
             return nullptr;
         return &p->second;

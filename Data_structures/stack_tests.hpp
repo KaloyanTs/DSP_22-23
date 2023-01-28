@@ -5,13 +5,13 @@
 
 #define AllStacks StaticStack<int>, LinkedStack<int>, DynamicStack<int>
 
-TEST_CASE("След създаване на стек той е празен", Stack, AllStacks)
+TEST_CASE_TEMPLATE("След създаване на стек той е празен", Stack, AllStacks)
 {
     Stack s;
     CHECK(s.empty());
 }
 
-TEST_CASE("Конструктор за копиране", Stack, AllStacks)
+TEST_CASE_TEMPLATE("Конструктор за копиране", Stack, AllStacks)
 {
     Stack s1;
     s1.push(3);
@@ -30,14 +30,14 @@ TEST_CASE("Конструктор за копиране", Stack, AllStacks)
     CHECK_EQ(s1.empty(), s2.empty());
 }
 
-TEST_CASE("Стекът не е празен след добавяне", Stack, AllStacks)
+TEST_CASE_TEMPLATE("Стекът не е празен след добавяне", Stack, AllStacks)
 {
     Stack s;
     s.push(10);
     CHECK(!s.empty());
 }
 
-TEST_CASE("Елементите се изключват в ред обратен на включване", Stack, AllStacks)
+TEST_CASE_TEMPLATE("Елементите се изключват в ред обратен на включване", Stack, AllStacks)
 {
     Stack s;
     s.push(10);
@@ -53,7 +53,7 @@ TEST_CASE("Елементите се изключват в ред обратен
     CHECK(s.empty());
 }
 
-TEST_CASE("Top връща последно включения елемент", Stack, AllStacks)
+TEST_CASE_TEMPLATE("Top връща последно включения елемент", Stack, AllStacks)
 {
     Stack s;
     s.push(10);
@@ -64,14 +64,14 @@ TEST_CASE("Top връща последно включения елемент", S
     CHECK_EQ(s.top(), 10);
 }
 
-TEST_CASE("Изключение при опит за поглеждане или изключване от празен стек", Stack, AllStacks)
+TEST_CASE_TEMPLATE("Изключение при опит за поглеждане или изключване от празен стек", Stack, AllStacks)
 {
     Stack s;
     CHECK_THROWS_AS(s.top(), std::runtime_error);
     CHECK_THROWS_AS(s.pop(), std::runtime_error);
 }
 
-TEST_CASE("Размяна на съдържанието на два стека", Stack, AllStacks)
+TEST_CASE_TEMPLATE("Размяна на съдържанието на два стека", Stack, AllStacks)
 {
     Stack s1;
     s1.push(3);
