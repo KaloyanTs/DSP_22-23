@@ -22,10 +22,10 @@ class Graph
         ++edgeCount;
         return true;
     }
-    void recComponent(const T &vertex, std::unordered_set<T> &res)
+    void recComponent(const T &vertex, std::unordered_set<T> &res) const
     {
         res.insert(vertex);
-        for (std::pair<T, int> const &edge : data[vertex])
+        for (std::pair<T, int> const &edge : data.at(vertex))
             if (!res.count(edge.first))
                 recComponent(edge.first, res);
     }
@@ -59,7 +59,6 @@ public:
         if (isEdge(from, to))
             return data[from][to];
         throw std::exception();
-        // todo
         return 0;
     }
     friend std::ostream &operator<<(std::ostream &os, const Graph<T> &g)
@@ -85,7 +84,7 @@ public:
         }
         return is;
     }
-    std::unordered_set<T> component(const T &vertex)
+    std::unordered_set<T> component(const T &vertex) const
     {
         if (!data.count(vertex))
             throw std::exception();
@@ -109,6 +108,7 @@ public:
         res.addEdge((*data.begin()).first, minCostTo, minCost);
 
         return res;
+        // todo implement
     }
     std::vector<T> BFS(const T &from)
     {
@@ -147,6 +147,14 @@ public:
                 if (!visited.count(edge.first))
                     q.push(edge.first);
         }
+        return res;
+    }
+    Graph<T> KruskalMST() const
+    {
+        Graph<T> res;
+        if (component(data.cbegin()->first).size() < data.size())
+            return res;
+        res.addEdge(T(), T(), 0);
         return res;
     }
 };

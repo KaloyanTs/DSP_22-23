@@ -70,4 +70,14 @@ TEST_CASE("DFS")
     CHECK_EQ(i, c.cend());
 }
 
+TEST_CASE("Kruskal MST generation")
+{
+    Graph<std::string> g;
+    readGraph("../graphs_examples/g3.graph", g);
+    std::cout << g << '\n';
+    g = g.KruskalMST();
+    std::cout << g << '\n';
+    CHECK(false);
+}
+
 #endif
