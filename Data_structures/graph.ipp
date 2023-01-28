@@ -124,10 +124,8 @@ public:
             visited.insert(current);
             res.push_back(current);
             for (std::pair<T, int> edge : data[current])
-            {
                 if (!visited.count(edge.first))
                     q.push(edge.first);
-            }
         }
         return res;
     }
@@ -145,11 +143,9 @@ public:
             q.pop();
             visited.insert(current);
             res.push_back(current);
-            for (std::pair<T, int> edge : data[from])
-            {
+            for (std::pair<T, int> edge : data[current])
                 if (!visited.count(edge.first))
                     q.push(edge.first);
-            }
         }
         return res;
     }

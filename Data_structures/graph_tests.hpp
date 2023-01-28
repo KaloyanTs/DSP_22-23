@@ -62,8 +62,6 @@ TEST_CASE("DFS")
     Graph<std::string> g;
     readGraph("../graphs_examples/g2.graph", g);
     std::vector<std::string> c = g.DFS("A");
-    for (std::string a : c)
-        std::cout << a << '\n';
     typename std::vector<std::string>::const_iterator i = c.cbegin();
     REQUIRE_EQ(c.size(), 3);
     CHECK_EQ(*(i++), "A");
