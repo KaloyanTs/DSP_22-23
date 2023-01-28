@@ -31,92 +31,14 @@ class AVLTree
     void leftToRightEl(const AVLNode<T> *from, std::ostream &os) const;
     void printEl(const AVLNode<T> *from, std::ostream &os = std::cout) const;
 
-    void updateHeight(AVLNode<T> *node)
-    {
-        node->height = 1 + std::max(height(node->left), height(node->right));
-    }
-
-    void rotateLeft(AVLNode<T> *&r)
-    {
-        assert(r->right);
-
-        AVLNode<T> *originalRight = r->right;
-        r->right = originalRight->left;
-        originalRight->left = r;
-        r = originalRight;
-    }
-
-    void rotateRight(AVLNode<T> *&r)
-    {
-        assert(r->left);
-
-        AVLNode<T> *originalLeft = r->left;
-        r->left = originalLeft->right;
-        originalLeft->right = r;
-        r = originalLeft;
-    }
-
-    void balanceRight(AVLNode<T> *&root)
-    {
-        assert(root != nullptr);
-
-        int rootBalance = balanceFactor(root);
-        int rightSubTreeBalance = balanceFactor(root->right);
-        if (rootBalance == 2)
-        {
-            if (rightSubTreeBalance == -1)
-            {
-                rotateRight(root->right);
-                updateHeight(root->right->right);
-                updateHeight(root->right);
-            }
-            rotateLeft(root);
-
-            updateHeight(root->left);
-        }
-        updateHeight(root);
-    }
-
-    void balanceLeft(AVLNode<T> *&root)
-    {
-        assert(root != nullptr);
-
-        int rootBalance = balanceFactor(root);
-        int rightSubTreeBalance = balanceFactor(root->left);
-        if (rootBalance == -2)
-        {
-            if (rightSubTreeBalance == 1)
-            {
-                rotateLeft(root->left);
-                updateHeight(root->left->right);
-                updateHeight(root->left);
-            }
-            rotateRight(root);
-
-            updateHeight(root->right);
-            updateHeight(root);
-        }
-    }
-
-    size_t height(const AVLNode<T> *node) const
-    {
-        if (!node)
-            return 0;
-        return node->height;
-    }
-    size_t balanceFactor(const AVLNode<T> *node) const
-    {
-        if (!node)
-            return 0;
-        return height(node->right) - height(node->left);
-    }
-
-    AVLNode<T> *findMinNode(AVLNode<T> *r)
-    {
-        while (r->left)
-            r = r->left;
-        return r;
-    }
+    AVLNode<T> *findMinNode(AVLNode<T> *r);
+    void updateHeight(AVLNode<T> *node);
+    void rotateLeft(AVLNode<T> *&r);
+    void rotateRight(AVLNode<T> *&r);
+    void balanceRight(AVLNode<T> *&root);
+    void balanceLeft(AVLNode<T> *&root);
+    size_t height(const AVLNode<T> *node) const;
+    size_t balanceFactor(const AVLNode<T> *node) const;
 
 public:
     AVLTree() : mRoot(nullptr) {}
@@ -136,6 +58,101 @@ public:
     const size_t depth() { return depthEl(mRoot); }
     ~AVLTree();
 };
+
+template <typename T>
+void AVLTree<T>::updateHeight(AVLNode<T> *node)
+{
+    node->height = 1 + std::max(height(node->left), height(node->right));
+}
+
+template <typename T>
+void AVLTree<T>::rotateLeft(AVLNode<T> *&r)
+{
+    assert(r->right);
+
+    AVLNode<T> *originalRight = r->right;
+    r->right = originalRight->left;
+    originalRight->left = r;
+    r = originalRight;
+}
+
+template <typename T>
+void AVLTree<T>::rotateRight(AVLNode<T> *&r)
+{
+    assert(r->left);
+
+    AVLNode<T> *originalLeft = r->left;
+    r->left = originalLeft->right;
+    originalLeft->right = r;
+    r = originalLeft;
+}
+
+template <typename T>
+void AVLTree<T>::balanceRight(AVLNode<T> *&root)
+{
+    assert(root != nullptr);
+
+    int rootBalance = balanceFactor(root);
+    int rightSubTreeBalance = balanceFactor(root->right);
+    if (rootBalance == 2)
+    {
+        if (rightSubTreeBalance == -1)
+        {
+            rotateRight(root->right);
+            updateHeight(root->right->right);
+            updateHeight(root->right);
+        }
+        rotateLeft(root);
+
+        updateHeight(root->left);
+    }
+    updateHeight(root);
+}
+
+template <typename T>
+void AVLTree<T>::balanceLeft(AVLNode<T> *&root)
+{
+    assert(root != nullptr);
+
+    int rootBalance = balanceFactor(root);
+    int rightSubTreeBalance = balanceFactor(root->left);
+    if (rootBalance == -2)
+    {
+        if (rightSubTreeBalance == 1)
+        {
+            rotateLeft(root->left);
+            updateHeight(root->left->right);
+            updateHeight(root->left);
+        }
+        rotateRight(root);
+
+        updateHeight(root->right);
+        updateHeight(root);
+    }
+}
+
+template <typename T>
+size_t AVLTree<T>::height(const AVLNode<T> *node) const
+{
+    if (!node)
+        return 0;
+    return node->height;
+}
+template <typename T>
+size_t AVLTree<T>::balanceFactor(const AVLNode<T> *node) const
+{
+    if (!node)
+        return 0;
+    return height(node->right) - height(node->left);
+}
+
+template <typename T>
+AVLNode<T> *AVLTree<T>::findMinNode(AVLNode<T> *r)
+{
+    while (r->left)
+        r = r->left;
+    return r;
+}
 
 template <typename T>
 AVLNode<T> *AVLTree<T>::find(AVLNode<T> *from, const T &el)
