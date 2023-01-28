@@ -106,6 +106,9 @@ TEST_CASE_TEMPLATE("Добавяне и изтриване на 100 елемен
         CHECK_EQ(*dict.find(std::to_string(i)), i);
         CHECK_EQ(*dict.find(std::to_string(101 - i)), 101 - i);
     }
+
+    dict["5"] = 55;
+    CHECK_EQ(dict["5"], 55);
 }
 
 #endif
