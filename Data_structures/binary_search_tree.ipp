@@ -52,9 +52,8 @@ BinarySearchTreeEl<T> *BinarySearchTree<T>::find(BinarySearchTreeEl<T> *from, co
         return nullptr;
     if (from->data == el)
         return from;
-    BinarySearchTreeEl<T> *l = find(from->left, el);
-    if (l)
-        return l;
+    if (from->data > el)
+        return find(from->left, el);
     return find(from->right, el);
 }
 
