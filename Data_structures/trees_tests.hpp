@@ -6,7 +6,7 @@
 #include "doctest.h"
 #include "binary_tree.ipp"
 #include "binary_search_tree.ipp"
-#include "avl_tree.hpp"
+#include "avl_tree.ipp"
 
 #define AllTrees BinaryTree<int>, BinarySearchTree<int>
 #define OrderedTrees AVLTree<int>, BinarySearchTree<int>
@@ -89,6 +89,17 @@ TEST_CASE("AVL дървото се самобалансира")
             REQUIRE(t.erase((i + (count >> 1)) % count));
         }
     }
+}
+
+int square(const int &x) { return x * x; }
+
+TEST_CASE("събиране на стойностите в дърво")
+{
+    AVLTree<int> t;
+    t.insert(1).insert(2).insert(3).insert(4).insert(5).insert(6).insert(7).insert(8);
+    std::vector<int> res = t.collect<int>(square);
+    for (unsigned i = 1; i <= res.size(); ++i)
+        CHECK_EQ(res[i - 1], square(i));
 }
 
 #endif
