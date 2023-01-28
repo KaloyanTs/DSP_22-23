@@ -7,5 +7,5 @@
 #include "queue_tests.hpp"
 #include "lists_tests.hpp"
 #include "trees_tests.hpp"
-// #include "graph_tests.hpp" //todo
+#include "graph_tests.hpp" //todo
 #include "dictionary_tests.hpp"

@@ -5,7 +5,7 @@
 #include <sstream>
 #include <string>
 #include "doctest.h"
-#include "hash_table.hpp"
+#include "hash_table.ipp"
 #include "avl_dictionary.ipp"
 
 unsigned hashString(const std::string &key)
