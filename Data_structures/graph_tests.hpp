@@ -6,7 +6,7 @@
 #include <string>
 #include <fstream>
 #include "doctest.h"
-#include "graph.hpp"
+#include "graph.ipp"
 
 void readGraph(const std::string &path, Graph<std::string> &g)
 {
@@ -20,7 +20,7 @@ void readGraph(const std::string &path, Graph<std::string> &g)
 TEST_CASE("Reading and printing graph")
 {
     Graph<std::string> g;
-    readGraph("graphs_examples/g1.graph", g);
+    readGraph("../graphs_examples/g1.graph", g);
     std::ostringstream s;
     s << g;
     CHECK(g.isEdge("A", "B"));
@@ -34,7 +34,7 @@ TEST_CASE("Reading and printing graph")
 TEST_CASE("Connected components")
 {
     Graph<std::string> g;
-    readGraph("graphs_examples/g2.graph", g);
+    readGraph("../graphs_examples/g2.graph", g);
     std::unordered_set<std::string> c = g.component("A");
     CHECK(c.count("A"));
     CHECK(c.count("B"));
@@ -47,9 +47,10 @@ TEST_CASE("Connected components")
 TEST_CASE("BFS")
 {
     Graph<std::string> g;
-    readGraph("graphs_examples/g2.graph", g);
+    readGraph("../graphs_examples/g2.graph", g);
     std::vector<std::string> c = g.BFS("A");
     typename std::vector<std::string>::const_iterator i = c.cbegin();
+    REQUIRE_EQ(c.size(), 3);
     CHECK_EQ(*i++, "A");
     CHECK_EQ(*i++, "B");
     CHECK_EQ(*i++, "C");
@@ -59,12 +60,15 @@ TEST_CASE("BFS")
 TEST_CASE("DFS")
 {
     Graph<std::string> g;
-    readGraph("graphs_examples/g2.graph", g);
+    readGraph("../graphs_examples/g2.graph", g);
     std::vector<std::string> c = g.DFS("A");
+    for (std::string a : c)
+        std::cout << a << '\n';
     typename std::vector<std::string>::const_iterator i = c.cbegin();
-    CHECK_EQ(*i++, "A");
-    CHECK_EQ(*i++, "B");
-    CHECK_EQ(*i++, "C");
+    REQUIRE_EQ(c.size(), 3);
+    CHECK_EQ(*(i++), "A");
+    CHECK_EQ(*(i++), "B");
+    CHECK_EQ(*(i++), "C");
     CHECK_EQ(i, c.cend());
 }
 
