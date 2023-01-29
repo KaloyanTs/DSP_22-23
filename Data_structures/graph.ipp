@@ -10,6 +10,11 @@
 template <typename T>
 class Graph
 {
+    using Edge = std::tuple<T, T, int>;
+    struct CheaperEdge
+    {
+        bool operator()(const Edge &a, const Edge &b) { return std::get<2>(a) > std::get<2>(b); }
+    };
     using ChildrenList = std::unordered_map<T, int>;
     using AdjList = std::unordered_map<T, ChildrenList>;
     AdjList data;
@@ -25,9 +30,24 @@ class Graph
     void recComponent(const T &vertex, std::unordered_set<T> &res) const
     {
         res.insert(vertex);
+        if (!data.count(vertex))
+            return;
         for (std::pair<T, int> const &edge : data.at(vertex))
             if (!res.count(edge.first))
                 recComponent(edge.first, res);
+    }
+    bool checkCycle(const T &prev, const T &from, std::unordered_set<T> &visited) const
+    {
+        if (visited.count(from))
+            return true;
+        if (!data.count(from))
+            return false;
+        visited.insert(from);
+        for (std::pair<T, int> const &edge : data.at(from))
+            if (edge.first != prev && checkCycle(from, edge.first, visited))
+                return true;
+        visited.erase(from);
+        return false;
     }
 
 public:
@@ -36,6 +56,19 @@ public:
     {
         for (std::tuple<T, T, int> const &edge : edgesList)
             data[std::get<0>(edge)][std::get<1>(edge)] = std::get<2>(edge);
+    }
+    bool removeEdge(const T &from, const T &to)
+    {
+        if (!data.count(from) || !data.at(from).count(to))
+            return false;
+        data[from].erase(to);
+        --edgeCount;
+        return true;
+    }
+    bool hasCycle() const
+    {
+        std::unordered_set<T> visited;
+        return checkCycle(T(), data.cbegin()->first, visited);
     }
     std::vector<T> neighbours(const T &vertex) const
     {
@@ -83,6 +116,17 @@ public:
             g.addEdge(from, to, w);
         }
         return is;
+    }
+    std::unordered_set<T> vertices() const
+    {
+        std::unordered_set<T> vertices;
+        for (std::pair<T, std::unordered_map<T, int>> const &p : data)
+        {
+            vertices.insert(p.first);
+            for (std::pair<T, int> const &edge : p.second)
+                vertices.insert(edge.first);
+        }
+        return vertices;
     }
     std::unordered_set<T> component(const T &vertex) const
     {
@@ -149,12 +193,45 @@ public:
         }
         return res;
     }
+    std::vector<Edge> edges() const
+    {
+        std::vector<Edge> res;
+        for (std::pair<T, std::unordered_map<T, int>> const &p : data)
+            for (std::pair<T, int> const &edge : p.second)
+                res.push_back(Edge(p.first, edge.first, edge.second));
+        return res;
+    }
     Graph<T> KruskalMST() const
     {
         Graph<T> res;
         if (component(data.cbegin()->first).size() < data.size())
             return res;
-        res.addEdge(T(), T(), 0);
+        std::priority_queue<Edge, std::vector<Edge>, CheaperEdge> q;
+        Edge edge;
+        for (std::pair<T, std::unordered_map<T, int>> const &p : data)
+            for (std::pair<T, int> const &edge : p.second)
+            {
+                q.push(std::tuple<T, T, int>(p.first, edge.first, edge.second));
+                q.push(std::tuple<T, T, int>(edge.first, p.first, edge.second));
+            }
+        size_t i = 0;
+        size_t neededEdges = vertices().size() - 1;
+        while (i < neededEdges)
+        {
+            edge = q.top();
+            q.pop();
+            if (res.isEdge(std::get<0>(edge), std::get<1>(edge)))
+                continue;
+            res.addEdge(std::get<0>(edge), std::get<1>(edge), std::get<2>(edge));
+            res.addEdge(std::get<1>(edge), std::get<0>(edge), std::get<2>(edge));
+            if (res.hasCycle())
+            {
+                res.removeEdge(std::get<0>(edge), std::get<1>(edge));
+                res.removeEdge(std::get<1>(edge), std::get<0>(edge));
+            }
+            else
+                ++i;
+        }
         return res;
     }
 };
