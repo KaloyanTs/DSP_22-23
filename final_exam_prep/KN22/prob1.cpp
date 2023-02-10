@@ -21,8 +21,9 @@ struct BarSlot
     static const size_t SIZE = 32;
     short beverages;
     BarSlot *next;
+    Client *sitting;
     BarSlot(const std::list<Beverage> &l = {}, BarSlot *_next = nullptr)
-        : next(_next)
+        : next(_next), sitting(nullptr)
     {
         for (Beverage b : l)
             beverages |= b;
@@ -32,13 +33,14 @@ struct BarSlot
 struct Client
 {
     short drinks;
-    Client *next;
+    Client *prev, *next;
+    BarSlot *seat;
     bool wants(Beverage b) const
     {
         return drinks & b;
     }
-    Client(const std::list<Beverage> &l)
-        : drinks(0)
+    Client(const std::list<Beverage> &l, Client *_prev = nullptr, Client *_next = nullptr)
+        : drinks(0), seat(nullptr)
     {
         for (Beverage b : l)
             drinks |= b;
@@ -64,7 +66,7 @@ struct Client
     }
     bool canSit(BarSlot *seat)
     {
-        return !(drinks & (~seat->beverages));
+        return !seat->sitting && !(drinks & (~seat->beverages));
     }
 };
 
@@ -82,6 +84,7 @@ void clear(List *&b)
 
 bool place(BarSlot *bar, Client *clients)
 {
+
     return true;
 }
 
@@ -93,7 +96,7 @@ Client *makeGroup(const std::list<std::list<Beverage>> &l)
     Client *head = new Client(*i++);
     Client *tail = head;
     while (i != l.cend())
-        tail = tail->next = new Client(*i++);
+        tail = tail->next = new Client(*i++, tail);
     return head;
 }
 
