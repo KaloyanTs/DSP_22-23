@@ -1,0 +1,10 @@
+ploshtad
+ploshtad banka a
+banka kula n
+kula mail i
+ploshtad other a
+other banicharnica n
+ploshtad mall n
+mall kino a
+mall banicharnica n
+banicharnica kino i
